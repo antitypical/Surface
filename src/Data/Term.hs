@@ -27,3 +27,11 @@ rename old new (Term _ binding) = case binding of
   Variable name -> if name == old then variable new else variable old
   Abstraction name body -> if name == old then abstraction name body else abstraction name (rename old new body)
   Expression body -> expression $ rename old new <$> body
+
+substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
+substitute name with (Term _ binding) = case binding of
+  Variable v -> if name == v then with else variable v
+  Abstraction name body -> abstraction name' body'
+    where name' = fresh (Set.union (freeVariables body) (freeVariables with)) name
+          body' = substitute name with (rename name name' body)
+  Expression body -> expression $ substitute name with <$> body
