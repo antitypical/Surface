@@ -1,11 +1,8 @@
 module Surface (
-  module Data.Binding,
-  module Data.Expression,
-  module Data.Name,
-  module Data.Term,
+  module Surface,
 ) where
 
-import Data.Name
-import Data.Binding
-import Data.Expression
-import Data.Term
+import Data.Name as Surface
+import Data.Binding as Surface
+import Data.Expression as Surface
+import Data.Term as Surface
