@@ -46,6 +46,9 @@ main = hspec $ do
     it "handles out-of-bounds indices into degenerate 1-length alphabets" $
       showNumeral "a" 1 `shouldBe` "a"
 
+    it "handles out-of-bounds indices into reasonable alphabets" $
+      showNumeral "ab" 2 `shouldBe` "ba"
+
   describe "interleave" $ do
     prop "ignores empty lists at left" $
       \ a -> "" `interleave` a `shouldBe` a
