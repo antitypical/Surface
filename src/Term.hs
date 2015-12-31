@@ -13,5 +13,5 @@ variable name = Term (singleton name) (Variable name)
 abstraction :: Name -> Term f -> Term f
 abstraction name body = Term (delete name $ freeVariables body) (Abstraction name body)
 
-expression :: (Foldable f, Functor f) => f (Term f) -> Term f
+expression :: (Foldable f) => f (Term f) -> Term f
 expression e = Term (foldMap freeVariables e) (Expression e)
