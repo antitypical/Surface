@@ -29,12 +29,12 @@ apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
 instance Show (Term Expression) where
-  show = fst . cata (\ b -> case b of
+  show = fst . para (\ b -> case b of
     Variable n -> (show n, -1)
-    Abstraction _ body -> body
+    Abstraction _ (_, body) -> body
     Expression (Type 0) -> ("Type", -1)
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, -1)
-    Expression (Application a b) -> (wrap 5 a ++ " " ++ wrap 4 b, 4)
+    Expression (Application (_, a) (_, b)) -> (wrap 5 a ++ " " ++ wrap 4 b, 4)
     Expression e -> (show e, -1))
     where wrap i (s, j) | i > j = s
           wrap i (s, _) = "(" ++ s ++ ")"
