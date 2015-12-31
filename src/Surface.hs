@@ -14,6 +14,9 @@ lambda t f = expression . Lambda t $ abstraction name body
   where body = f $ variable name
         name = Maybe.fromMaybe (Local 0) $ maxBoundVariable body
 
+_type' :: Term Expression
+_type' = expression $ Type 0
+
 instance Show (Term Expression) where
   show = show . out
 
