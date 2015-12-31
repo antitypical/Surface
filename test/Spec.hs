@@ -34,6 +34,9 @@ main = hspec $ do
     prop "ignores empty lists at right" $
       \ a -> a `interleave` "" `shouldBe` a
 
+    prop "is as long as both its arguments combined" $
+      \ a b -> length (a `interleave` b) `shouldBe` length a + length (b :: String)
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
