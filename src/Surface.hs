@@ -24,7 +24,10 @@ apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
 instance Show (Term Expression) where
-  show = show . out
+  show = cata $ \ b -> case b of
+    Variable n -> show n
+    Abstraction _ body -> show body
+    Expression e -> show e
 
 instance Eq (Term Expression) where
   a == b = freeVariables a == freeVariables b && out a == out b
