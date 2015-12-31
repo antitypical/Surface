@@ -24,6 +24,6 @@ maxBoundVariable term = case out term of
 
 rename :: (Foldable f, Functor f) => Name -> Name -> Term f -> Term f
 rename old new (Term _ binding) = case binding of
-  (Variable name) -> if name == old then variable new else variable old
-  (Abstraction name body) -> if name == old then abstraction name body else abstraction name (rename old new body)
-  (Expression body) -> expression $ rename old new <$> body
+  Variable name -> if name == old then variable new else variable old
+  Abstraction name body -> if name == old then abstraction name body else abstraction name (rename old new body)
+  Expression body -> expression $ rename old new <$> body
