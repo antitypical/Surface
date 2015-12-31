@@ -3,7 +3,7 @@ version:             0.1.0.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
 homepage:            http://github.com/antitypical/Surface#readme
-license:             BSD3
+license:             MIT
 license-file:        LICENSE
 author:              Rob Rix
 maintainer:          rob.rix@me.com
