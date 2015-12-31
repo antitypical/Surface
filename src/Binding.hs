@@ -3,8 +3,8 @@ module Binding where
 
 import Name
 
-data Binding expression term
+data Binding f term
   = Variable Name
   | Abstraction Name term
-  | Expression expression
+  | Expression (f term)
   deriving (Show, Eq, Functor)
