@@ -2,6 +2,7 @@ module Data.Name (
   Name(..),
   freshBy,
   fresh,
+  prime,
 ) where
 
 import Data.Name.Internal
@@ -22,3 +23,7 @@ freshBy _ name = name
 
 fresh :: Set Name -> Name -> Name
 fresh set = freshBy (`member` set)
+
+prime :: Name -> Name
+prime (Local i) = Local $ i + 1
+prime (Global n) = Global $ n ++ "ʹ"
