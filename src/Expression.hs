@@ -3,4 +3,4 @@
 module Expression where
 
 data Expression f = Type Int
-  deriving Functor
+  deriving (Functor, Show, Eq)
