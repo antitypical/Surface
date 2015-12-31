@@ -35,3 +35,6 @@ substitute name with (Term _ binding) = case binding of
     where name' = fresh (Set.union (freeVariables body) (freeVariables with)) name
           body' = substitute name with (rename name name' body)
   Expression body -> expression $ substitute name with <$> body
+
+cata :: (Functor f) => (Binding f a -> a) -> Term f -> a
+cata f = f . fmap (cata f) . out
