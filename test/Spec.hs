@@ -14,7 +14,7 @@ main = hspec $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
 
-    it "10 has two diits in base 10" $
+    it "10 has two digits in base 10" $
       digits 10 10 `shouldBe` [1, 0]
 
 identity :: Term Expression
