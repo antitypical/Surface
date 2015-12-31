@@ -3,7 +3,7 @@ module Term where
 import Binding
 import Name
 
-data Term f = Term { freeVariables :: [Name], expression :: Binding f (Term f) }
+data Term f = Term { freeVariables :: [Name], out :: Binding f (Term f) }
   deriving (Show, Eq)
 
 variable :: Name -> Term f
