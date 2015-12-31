@@ -13,6 +13,7 @@ import Data.Name as Surface'
 import Data.Name.Internal
 import Data.Term as Surface'
 import qualified Data.Maybe as Maybe
+import qualified Data.Set as Set
 
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 lambda t f = expression . Lambda t $ abstraction name body
@@ -35,6 +36,7 @@ instance Show (Term Expression) where
     Expression (Type 0) -> ("Type", maxBound)
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, maxBound)
     Expression (Application (_, a) (_, b)) -> (wrap 4 (<=) a ++ " " ++ wrap 4 (<) b, 4)
+    Expression (Lambda (_, type') (Term free (Abstraction name _), body)) | Set.member name free -> ("λ " ++ show name ++ " : " ++ wrap 3 (<=) type' ++ " . " ++ wrap 3 (<) body, 3)
     Expression e -> (show e, -1)
     :: (String, Int))
     where wrap i op (s, j) | i `op` j = s
