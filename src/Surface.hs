@@ -20,6 +20,9 @@ _type n = expression $ Type n
 _type' :: Term Expression
 _type' = _type 0
 
+apply :: Term Expression -> Term Expression -> Term Expression
+apply a b = expression $ Application a b
+
 instance Show (Term Expression) where
   show = show . out
 
