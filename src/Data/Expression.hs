@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveFunctor, DeriveFoldable #-}
-
-module Expression where
+module Data.Expression where
 
 data Expression recur
   = Type Int

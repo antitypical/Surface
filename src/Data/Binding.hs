@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveFunctor, DeriveFoldable #-}
-module Binding where
+module Data.Binding where
 
-import Name
+import Data.Name
 
 data Binding f term
   = Variable Name

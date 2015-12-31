@@ -1,4 +1,4 @@
-module Name where
+module Data.Name where
 
 import Data.Set
 

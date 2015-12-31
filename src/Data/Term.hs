@@ -1,8 +1,8 @@
-module Term where
+module Data.Term where
 
-import Binding
-import Name
+import Data.Binding
 import Data.Foldable
+import Data.Name
 import Data.Set
 
 data Term f = Term { freeVariables :: Set Name, out :: Binding f (Term f) }
