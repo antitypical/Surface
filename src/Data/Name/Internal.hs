@@ -15,6 +15,7 @@ countDigits :: Integral a => a -> a -> a
 countDigits base i = 1 + floor (logBase (fromIntegral base) (fromIntegral $ abs i))
 
 showNumeral :: Integral i => String -> i -> String
+showNumeral "" _ = ""
 showNumeral alphabet i = [ alphabet `List.genericIndex` i ]
 
 interleave :: [a] -> [a] -> [a]
