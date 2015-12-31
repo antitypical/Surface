@@ -1,4 +1,8 @@
-module Data.Name where
+module Data.Name (
+  Name(..),
+  freshBy,
+  fresh,
+) where
 
 import Data.Set
 
