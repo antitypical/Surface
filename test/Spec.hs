@@ -32,6 +32,9 @@ main = hspec $ do
     it "associates applications to the left without parentheses" $
       show (apply (apply (variable (Local 0)) (variable (Local 1))) (variable (Local 2))) `shouldBe` "a b c"
 
+    it "parenthesizes right-nested applications" $
+      show (apply (variable (Local 0)) (apply (variable (Local 1)) (variable (Local 2)))) `shouldBe` "a (b c)"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
