@@ -17,6 +17,9 @@ main = hspec $ do
     it "10 has two digits in base 10" $
       digits 10 10 `shouldBe` [1, 0]
 
+    it "1234’s digits are produced in order in base 10" $
+      digits 10 1234 `shouldBe` [1, 2, 3, 4]
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
