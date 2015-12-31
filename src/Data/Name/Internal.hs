@@ -2,6 +2,7 @@ module Data.Name.Internal (
   digits,
   countDigits,
   showNumeral,
+  interleave,
 ) where
 
 import qualified Data.List as List
