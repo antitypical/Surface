@@ -34,7 +34,7 @@ instance Show (Term Expression) where
     Abstraction _ body -> body
     Expression (Type 0) -> ("Type", -1)
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, -1)
-    Expression (Application a b) -> (fst a ++ " " ++ fst b, 4)
+    Expression (Application a b) -> (wrap 5 a ++ " " ++ wrap 4 b, 4)
     Expression e -> (show e, -1))
     where wrap i (s, j) | i > j = s
           wrap i (s, _) = "(" ++ s ++ ")"
