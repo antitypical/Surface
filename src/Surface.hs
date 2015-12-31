@@ -6,6 +6,7 @@ module Surface (
 import Data.Binding as Surface
 import Data.Expression as Surface
 import Data.Name as Surface
+import Data.Name.Internal
 import Data.Term as Surface
 import qualified Data.Maybe as Maybe
 
@@ -28,6 +29,7 @@ instance Show (Term Expression) where
     Variable n -> show n
     Abstraction _ body -> show body
     Expression (Type 0) -> "Type"
+    Expression (Type n) -> "Type" ++ showNumeral "0123456789" n
     Expression e -> show e
 
 instance Eq (Term Expression) where
