@@ -4,7 +4,6 @@ import Binding
 import Name
 
 data Term f = Term { freeVariables :: [Name], out :: Binding f (Term f) }
-  deriving (Show, Eq)
 
 variable :: Name -> Term f
 variable name = Term [ name ] (Variable name)
