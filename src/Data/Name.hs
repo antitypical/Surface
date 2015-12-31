@@ -4,10 +4,15 @@ module Data.Name (
   fresh,
 ) where
 
+import Data.Name.Internal
 import Data.Set
 
 data Name = Local Int | Global String
-  deriving (Show, Eq, Ord)
+  deriving (Eq, Ord)
+
+instance Show Name where
+  show (Local i) = showNumeral "abcdefghijklmnopqrstuvwxyz" i
+  show (Global name) = name
 
 freshBy :: (Name -> Bool) -> Name -> Name
 freshBy used name | used name = case name of
