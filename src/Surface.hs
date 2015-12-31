@@ -29,13 +29,13 @@ apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
 instance Show (Term Expression) where
-  show = cata $ \ b -> case b of
-    Variable n -> show n
-    Abstraction _ body -> show body
-    Expression (Type 0) -> "Type"
-    Expression (Type n) -> "Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n
-    Expression (Application a b) -> a ++ " " ++ b
-    Expression e -> show e
+  show = fst . cata (\ b -> case b of
+    Variable n -> (show n, -1)
+    Abstraction _ body -> body
+    Expression (Type 0) -> ("Type", -1)
+    Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, -1)
+    Expression (Application a b) -> (fst a ++ " " ++ fst b, 4)
+    Expression e -> (show e, -1))
 
 instance Eq (Term Expression) where
   a == b = freeVariables a == freeVariables b && out a == out b
