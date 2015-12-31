@@ -27,6 +27,7 @@ instance Show (Term Expression) where
   show = cata $ \ b -> case b of
     Variable n -> show n
     Abstraction _ body -> show body
+    Expression (Type 0) -> "Type"
     Expression e -> show e
 
 instance Eq (Term Expression) where
