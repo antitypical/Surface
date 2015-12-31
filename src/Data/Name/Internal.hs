@@ -22,6 +22,6 @@ showNumeral alphabet i = showNumeral' alphabet i 1
         showNumeral' (a : rest) i n = showNumeral' rest (i - 1) n
 
 interleave :: [a] -> [a] -> [a]
-interleave [] bs = bs
-interleave as [] = as
+interleave [] ys = ys
+interleave xs [] = xs
 interleave (x : xs) y = x : interleave y xs
