@@ -40,6 +40,9 @@ main = hspec $ do
     it "selects single letters in an alphabet" $
       showNumeral "a" 0 `shouldBe` "a"
 
+    it "handles indices into degenerate 0-length alphabets" $
+      showNumeral "" 0 `shouldBe` ""
+
     it "handles out-of-bounds indices into degenerate 1-length alphabets" $
       showNumeral "a" 1 `shouldBe` "a"
 
