@@ -27,6 +27,10 @@ main = hspec $ do
     it "selects single letters in an alphabet" $
       showNumeral "a" 0 `shouldBe` "a"
 
+  describe "interleave" $ do
+    it "ignores empty lists at left" $
+      "" `interleave` "b" `shouldBe` "b"
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
