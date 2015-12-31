@@ -38,6 +38,9 @@ main = hspec $ do
     it "associates lambdas to the right without parentheses" $
       show identity `shouldBe` "λ b : Type . λ a : b . a"
 
+    it "renders lambdas without abstractions as function types" $
+      show (_type' --> _type') `shouldBe` "Type → Type"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
