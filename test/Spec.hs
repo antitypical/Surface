@@ -23,6 +23,10 @@ main = hspec $ do
     it "produces two digits for 255 in base 16" $
       digits 16 255 `shouldBe` [15, 15]
 
+  describe "showNumeral" $ do
+    it "selects single letters in an alphabet" $
+      showNumeral "a" 0 `shouldBe` "a"
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
