@@ -12,16 +12,16 @@ main = hspec $ do
 
   describe "show" $ do
     it "shows Type 0 without subscript" $
-      show _type' `shouldBe` "Type"
+      show (_type' :: Term Expression) `shouldBe` "Type"
 
     it "shows Type (n > 0) with subscript" $
-      show (_type 1) `shouldBe` "Type₁"
+      show (_type 1 :: Term Expression) `shouldBe` "Type₁"
 
     it "shows Type (n > 9) with subscript digits" $
-      show (_type 10) `shouldBe` "Type₁₀"
+      show (_type 10 :: Term Expression) `shouldBe` "Type₁₀"
 
     it "shows Type (n > 10) with subscript digits" $
-      show (_type 12) `shouldBe` "Type₁₂"
+      show (_type 12 :: Term Expression) `shouldBe` "Type₁₂"
 
     it "shows local variables as letters" $
       show (variable (Local 0) :: Term Expression) `shouldBe` "a"

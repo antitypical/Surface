@@ -26,6 +26,12 @@ binding b = Term (foldMap freeVariables b) (Binding b)
 expression :: Foldable f => f (Term f) -> Term f
 expression e = Term (foldMap freeVariables e) (Binding (Expression e))
 
+_type :: Foldable f => Int -> Term f
+_type n = typing $ Type n
+
+_type' :: Foldable f => Term f
+_type' = _type 0
+
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b

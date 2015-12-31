@@ -3,8 +3,6 @@ module Surface (
   module Surface',
   lambda,
   (-->),
-  _type,
-  _type',
   apply,
 ) where
 
@@ -24,12 +22,6 @@ lambda t f = expression . Lambda t $ abstraction name body
 
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = expression $ Lambda a b
-
-_type :: Int -> Term Expression
-_type n = typing $ Type n
-
-_type' :: Term Expression
-_type' = _type 0
 
 apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
