@@ -16,3 +16,6 @@ lambda t f = expression . Lambda t $ abstraction name body
 
 instance Show (Term Expression) where
   show = show . out
+
+instance Eq (Term Expression) where
+  a == b = freeVariables a == freeVariables b && out a == out b
