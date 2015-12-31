@@ -28,8 +28,8 @@ main = hspec $ do
       showNumeral "a" 0 `shouldBe` "a"
 
   describe "interleave" $ do
-    it "ignores empty lists at left" $
-      "" `interleave` "b" `shouldBe` "b"
+    prop "ignores empty lists at left" $
+      \ a -> "" `interleave` a `shouldBe` a
 
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
