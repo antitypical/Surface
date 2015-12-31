@@ -19,7 +19,7 @@ import qualified Data.Set as Set
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 lambda t f = expression . Lambda t $ abstraction name body
   where body = f $ variable name
-        name = Maybe.fromMaybe (Local 0) $ maxBoundVariable body
+        name = maybe (Local 0) prime $ maxBoundVariable body
 
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = expression $ Lambda a b
