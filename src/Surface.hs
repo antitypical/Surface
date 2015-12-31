@@ -18,7 +18,7 @@ _type :: Int -> Term Expression
 _type n = expression $ Type n
 
 _type' :: Term Expression
-_type' = expression $ Type 0
+_type' = _type 0
 
 instance Show (Term Expression) where
   show = show . out
