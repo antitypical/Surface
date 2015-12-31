@@ -38,3 +38,7 @@ substitute name with (Term _ binding) = case binding of
 
 cata :: Functor f => (Binding f a -> a) -> Term f -> a
 cata f = f . fmap (cata f) . out
+
+para :: Functor f => (Binding f (Term f, a) -> a) -> Term f -> a
+para f = f . fmap fanout . out
+  where fanout a = (a, para f a)
