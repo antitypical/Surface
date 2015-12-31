@@ -37,6 +37,9 @@ main = hspec $ do
     prop "is as long as both its arguments combined" $
       \ a b -> length (a `interleave` b) `shouldBe` length a + length (b :: String)
 
+    prop "is left-biased" $
+      \ a b -> ('a' : a) `interleave` b `shouldBe` 'a' : (b `interleave` a)
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
