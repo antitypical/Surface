@@ -27,6 +27,9 @@ main = hspec $ do
     it "selects single letters in an alphabet" $
       showNumeral "a" 0 `shouldBe` "a"
 
+    it "cycles the alphabet for out-of-bounds indices" $
+      showNumeral "a" 1 `shouldBe` "aa"
+
   describe "interleave" $ do
     prop "ignores empty lists at left" $
       \ a -> "" `interleave` a `shouldBe` a
