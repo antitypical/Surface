@@ -20,4 +20,4 @@ showNumeral alphabet i = [ alphabet `List.genericIndex` i ]
 interleave :: [a] -> [a] -> [a]
 interleave [] bs = bs
 interleave as [] = as
-interleave (x : xs) (y : ys) = x : y : interleave xs ys
+interleave (x : xs) y = x : interleave y xs
