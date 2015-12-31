@@ -14,6 +14,9 @@ variable name = Term (Set.singleton name) (Binding (Variable name))
 abstraction :: Name -> Term f -> Term f
 abstraction name body = Term (Set.delete name $ freeVariables body) (Binding (Abstraction name body))
 
+annotation :: Foldable f => Term f -> Term f -> Term f
+annotation term type' = typing $ Annotation term type'
+
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
 typing t = Term (foldMap freeVariables t) t
 
