@@ -29,6 +29,9 @@ main = hspec $ do
     it "bare applications are unparenthesized" $
       show (apply (variable (Local 0)) (variable (Local 1))) `shouldBe` "a b"
 
+    it "associates applications to the left without parentheses" $
+      show (apply (apply (variable (Local 0)) (variable (Local 1))) (variable (Local 2))) `shouldBe` "a b c"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
