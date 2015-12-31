@@ -34,10 +34,10 @@ instance Show (Term Expression) where
     Abstraction _ (_, body) -> body
     Expression (Type 0) -> ("Type", -1)
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, -1)
-    Expression (Application (_, a) (_, b)) -> (wrap 5 a ++ " " ++ wrap 4 b, 4)
+    Expression (Application (_, a) (_, b)) -> (wrap 4 (<=) a ++ " " ++ wrap 4 (<) b, 4)
     Expression e -> (show e, -1))
-    where wrap i (s, j) | i > j = s
-          wrap i (s, _) = "(" ++ s ++ ")"
+    where wrap i op (s, j) | i `op` j = s
+          wrap i _ (s, _) = "(" ++ s ++ ")"
 
 instance Eq (Term Expression) where
   a == b = freeVariables a == freeVariables b && out a == out b
