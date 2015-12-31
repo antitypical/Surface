@@ -6,7 +6,7 @@ import Data.Foldable
 import Data.Name
 import qualified Data.Set as Set
 
-data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Maybe (f (Term f)), out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Maybe (Term f), out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
 variable name = Term (Set.singleton name) Nothing (Binding (Variable name))
