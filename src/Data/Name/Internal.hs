@@ -23,5 +23,4 @@ showNumeral alphabet i = showNumeral' alphabet i 1
 
 interleave :: [a] -> [a] -> [a]
 interleave [] ys = ys
-interleave xs [] = xs
 interleave (x : xs) y = x : interleave y xs
