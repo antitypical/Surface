@@ -10,6 +10,10 @@ main = hspec $ do
     it "produces binding abstractons" $
       lambda (expression $ Type 0) id `shouldBe` Term mempty (Expression $ Lambda (Term mempty $ Expression (Type 0)) (Term mempty $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) (Variable $ Local 0)))
 
+  describe "show" $ do
+    it "shows Type 0 without subscript" $
+      show _type' `shouldBe` "Type"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
