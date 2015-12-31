@@ -36,6 +36,8 @@ instance Show (Term Expression) where
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, -1)
     Expression (Application a b) -> (fst a ++ " " ++ fst b, 4)
     Expression e -> (show e, -1))
+    where wrap i (s, j) | i > j = s
+          wrap i (s, _) = "(" ++ s ++ ")"
 
 instance Eq (Term Expression) where
   a == b = freeVariables a == freeVariables b && out a == out b
