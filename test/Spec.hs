@@ -8,7 +8,7 @@ main :: IO ()
 main = hspec $ do
   describe "lambda" $ do
     it "produces binding abstractons" $
-      lambda (typing $ Type 0) id `shouldBe` Term mempty (Binding $ Expression $ Lambda (Term mempty $ Type 0) (Term mempty $ Binding $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) (Binding $ Variable $ Local 0)))
+      lambda (typing $ Type 0) id `shouldBe` Term mempty Nothing (Binding $ Expression $ Lambda (Term mempty Nothing $ Type 0) (Term mempty Nothing $ Binding $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) Nothing (Binding $ Variable $ Local 0)))
 
   describe "show" $ do
     it "shows Type 0 without subscript" $

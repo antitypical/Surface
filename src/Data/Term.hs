@@ -6,25 +6,25 @@ import Data.Foldable
 import Data.Name
 import qualified Data.Set as Set
 
-data Term f = Term { freeVariables :: Set.Set Name, out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Maybe (f (Term f)), out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
-variable name = Term (Set.singleton name) (Binding (Variable name))
+variable name = Term (Set.singleton name) Nothing (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name body = Term (Set.delete name $ freeVariables body) (Binding (Abstraction name body))
+abstraction name body = Term (Set.delete name $ freeVariables body) Nothing (Binding (Abstraction name body))
 
 annotation :: Foldable f => Term f -> Term f -> Term f
 annotation term type' = typing $ Annotation term type'
 
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
-typing t = Term (foldMap freeVariables t) t
+typing t = Term (foldMap freeVariables t) Nothing t
 
 binding :: Foldable f => Binding f (Term f) -> Term f
-binding b = Term (foldMap freeVariables b) (Binding b)
+binding b = Term (foldMap freeVariables b) Nothing (Binding b)
 
 expression :: Foldable f => f (Term f) -> Term f
-expression e = Term (foldMap freeVariables e) (Binding (Expression e))
+expression e = Term (foldMap freeVariables e) Nothing (Binding (Expression e))
 
 _type :: Foldable f => Int -> Term f
 _type n = typing $ Type n
@@ -40,13 +40,13 @@ maxBoundVariable = cata $ \ t -> case t of
   _ -> Nothing
 
 rename :: (Foldable f, Functor f) => Name -> Name -> Term f -> Term f
-rename old new (Term _ binding) = case binding of
+rename old new (Term _ _ binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else variable old
   Binding (Abstraction name body) -> if name == old then abstraction name body else abstraction name (rename old new body)
   Binding (Expression body) -> expression $ rename old new <$> body
 
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
-substitute name with (Term _ binding) = case binding of
+substitute name with (Term _ _ binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name body) -> abstraction name' body'
     where name' = fresh (Set.union (freeVariables body) (freeVariables with)) name
