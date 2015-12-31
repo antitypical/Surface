@@ -14,6 +14,9 @@ main = hspec $ do
     it "shows Type 0 without subscript" $
       show _type' `shouldBe` "Type"
 
+    it "shows Type (n > 0) with subscript" $
+      show (_type 1) `shouldBe` "Type1"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
