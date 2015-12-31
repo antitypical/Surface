@@ -31,6 +31,9 @@ main = hspec $ do
     prop "ignores empty lists at left" $
       \ a -> "" `interleave` a `shouldBe` a
 
+    prop "ignores empty lists at right" $
+      \ a -> a `interleave` "" `shouldBe` a
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
