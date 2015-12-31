@@ -23,6 +23,9 @@ main = hspec $ do
     it "shows Type (n > 10) with subscript digits" $
       show (_type 12) `shouldBe` "Type₁₂"
 
+    it "shows local variables as letters" $
+      show (variable (Local 0) :: Term Expression) `shouldBe` "a"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
