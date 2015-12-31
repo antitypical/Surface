@@ -27,7 +27,7 @@ expression :: Foldable f => f (Term f) -> Term f
 expression e = binding $ Expression e
 
 _type :: Foldable f => Int -> Term f
-_type n = typing $ Type n
+_type n = Term mempty (Just . _type $ n + 1) $ Type n
 
 _type' :: Foldable f => Term f
 _type' = _type 0
