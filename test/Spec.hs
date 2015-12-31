@@ -26,6 +26,9 @@ main = hspec $ do
     it "shows local variables as letters" $
       show (variable (Local 0) :: Term Expression) `shouldBe` "a"
 
+    it "bare applications are unparenthesized" $
+      show (apply (variable (Local 0)) (variable (Local 1))) `shouldBe` "a b"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
