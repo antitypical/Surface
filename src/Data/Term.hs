@@ -36,5 +36,5 @@ substitute name with (Term _ binding) = case binding of
           body' = substitute name with (rename name name' body)
   Expression body -> expression $ substitute name with <$> body
 
-cata :: (Functor f) => (Binding f a -> a) -> Term f -> a
+cata :: Functor f => (Binding f a -> a) -> Term f -> a
 cata f = f . fmap (cata f) . out
