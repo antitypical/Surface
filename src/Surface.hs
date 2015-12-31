@@ -30,6 +30,7 @@ instance Show (Term Expression) where
     Abstraction _ body -> show body
     Expression (Type 0) -> "Type"
     Expression (Type n) -> "Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n
+    Expression (Application a b) -> a ++ " " ++ b
     Expression e -> show e
 
 instance Eq (Term Expression) where
