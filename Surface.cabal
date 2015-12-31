@@ -20,6 +20,7 @@ library
                      , Data.Name
                      , Data.Name.Internal
                      , Data.Term
+                     , Data.Typing
                      , Surface
   build-depends:       base >= 4.7 && < 5
                      , containers
