@@ -15,3 +15,9 @@ abstraction name body = Term (delete name $ freeVariables body) (Abstraction nam
 
 expression :: (Foldable f) => f (Term f) -> Term f
 expression e = Term (foldMap freeVariables e) (Expression e)
+
+maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
+maxBoundVariable term = case out term of
+  Variable _ -> Nothing
+  Abstraction name _ -> Just name
+  Expression e -> maximum (maxBoundVariable <$> e)
