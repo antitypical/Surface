@@ -35,6 +35,9 @@ main = hspec $ do
     it "parenthesizes right-nested applications" $
       show (apply (variable (Local 0)) (apply (variable (Local 1)) (variable (Local 2)))) `shouldBe` "a (b c)"
 
+    it "associates lambdas to the right without parentheses" $
+      show identity `shouldBe` "λ b : Type . λ a : b . a"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]
