@@ -20,6 +20,9 @@ main = hspec $ do
     it "shows Type (n > 9) with subscript digits" $
       show (_type 10) `shouldBe` "Type10"
 
+    it "shows Type (n > 10) with subscript digits" $
+      show (_type 12) `shouldBe` "Type12"
+
   describe "digits" $ do
     it "zero is zero in base 10" $
       digits 10 0 `shouldBe` [0]

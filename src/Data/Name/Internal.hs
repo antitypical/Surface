@@ -16,10 +16,10 @@ countDigits base i = 1 + floor (logBase (fromIntegral base) (fromIntegral $ abs 
 
 showNumeral :: Integral i => String -> i -> String
 showNumeral "" _ = ""
-showNumeral alphabet i = showNumeral' alphabet i 1
-  where showNumeral' "" i n = showNumeral' (interleave alphabet alphabet) i (n * 2)
-        showNumeral' a 0 n = take n a
-        showNumeral' (a : rest) i n = showNumeral' rest (i - 1) n
+showNumeral alphabet j = showNumeral' alphabet j
+  where showNumeral' "" i = showNumeral' alphabet (j `div` (j - i)) ++ showNumeral' alphabet i
+        showNumeral' (a : _) 0 = [ a ]
+        showNumeral' (a : rest) i = showNumeral' rest (i - 1)
 
 interleave :: [a] -> [a] -> [a]
 interleave [] ys = ys
