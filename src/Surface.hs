@@ -37,12 +37,16 @@ instance Show (Term Expression) where
   show = fst . para (\ b -> case b of
     Variable n -> (show n, maxBound)
     Abstraction _ (_, body) -> body
+
     Expression (Type 0) -> ("Type", maxBound)
     Expression (Type n) -> ("Type" ++ showNumeral "₀₁₂₃₄₅₆₇₈₉" n, maxBound)
+
     Expression (Application (_, a) (_, b)) -> (wrap 4 (<=) a ++ " " ++ wrap 4 (<) b, 4)
+
     Expression (Lambda (_, type') (Term _ (Abstraction name (Term free _)), body)) | Set.member name free -> ("λ " ++ show name ++ " : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
     Expression (Lambda (_, type') (Term _ (Abstraction _ _), body)) -> ("λ _ : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
     Expression (Lambda (_, type') (_, body)) -> (wrap 3 (<) type' ++ " → " ++ wrap 3 (<=) body, 3)
+
     :: (String, Int))
     where wrap i op (s, j) | i `op` j = s
           wrap i _ (s, _) = "(" ++ s ++ ")"
