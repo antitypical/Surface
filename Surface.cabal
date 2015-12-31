@@ -38,6 +38,7 @@ test-suite Surface-test
   main-is:             Spec.hs
   build-depends:       base
                      , Surface
+                     , containers
                      , hspec
                      , QuickCheck
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
