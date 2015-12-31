@@ -1,13 +1,17 @@
 {-# LANGUAGE FlexibleInstances #-}
 module Surface (
-  module Surface,
+  module Surface',
+  lambda,
+  _type,
+  _type',
+  apply,
 ) where
 
-import Data.Binding as Surface
-import Data.Expression as Surface
-import Data.Name as Surface
+import Data.Binding as Surface'
+import Data.Expression as Surface'
+import Data.Name as Surface'
 import Data.Name.Internal
-import Data.Term as Surface
+import Data.Term as Surface'
 import qualified Data.Maybe as Maybe
 
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
