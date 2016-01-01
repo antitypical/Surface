@@ -21,7 +21,11 @@ lambda t f = expression . Lambda t $ abstraction name body
         name = maybe (Local 0) prime $ maxBoundVariable body
 
 (-->) :: Term Expression -> Term Expression -> Term Expression
-a --> b = expression $ Lambda a b
+a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Lambda a b
+  where type' = do
+          left <- typeOf a
+          right <- typeOf b
+          return $ left --> right
 
 apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
