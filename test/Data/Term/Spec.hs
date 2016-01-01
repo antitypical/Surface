@@ -1,5 +1,6 @@
 module Data.Term.Spec (spec) where
 
+import Prelude hiding (pi)
 import Surface
 import Test.Hspec
 
@@ -44,7 +45,7 @@ spec = do
       infer _type' `shouldBe` Right (_type 1)
 
     it "infers the type of `identity`" $
-      infer identity `shouldBe` Right (_type' `Surface.pi` (\ a -> a --> a))
+      infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
 
 infer :: Term Expression -> Result (Term Expression)
 infer term = typeOf term mempty
