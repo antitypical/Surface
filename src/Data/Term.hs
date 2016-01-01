@@ -26,7 +26,7 @@ binding :: Foldable f => Binding f (Term f) -> Term f
 binding b = Term (foldMap freeVariables b) (Right implicit) (Binding b)
 
 expression :: Foldable f => f (Term f) -> Term f
-expression e = Term (foldMap freeVariables e) Nothing (Binding (Expression e))
+expression e = Term (foldMap freeVariables e) (Right implicit) (Binding (Expression e))
 
 _type :: Foldable f => Int -> Term f
 _type n = Term mempty (Right . _type $ n + 1) $ Type n
