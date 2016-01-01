@@ -35,7 +35,7 @@ checkedBinding :: Foldable f => TypeChecker f -> Binding f (Term f) -> Term f
 checkedBinding typeChecker = checkedTyping typeChecker . Binding
 
 checkedExpression :: Foldable f => TypeChecker f -> f (Term f) -> Term f
-checkedExpression typeChecker e = Term (foldMap freeVariables e) typeChecker (Binding (Expression e))
+checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
 _type :: Foldable f => Int -> Term f
 _type n = Term mempty (const . Right . _type $ n + 1) $ Type n
