@@ -6,6 +6,8 @@ import Data.Foldable
 import Data.Name
 import qualified Data.Set as Set
 
+type Result a = Either String a
+
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Maybe (Term f), out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
