@@ -76,6 +76,7 @@ substitute name with term@(Term _ type' binding) = case binding of
   Annotation a b -> let a' = substitute name with a
                         b' = substitute name with b in checkedTyping (check b' a') (Annotation a' b')
   Type _ -> term
+  Implicit -> term
 
 applySubstitution :: (Foldable f, Functor f) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
