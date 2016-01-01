@@ -2,6 +2,7 @@ module Data.Name (
   Name(..),
   freshBy,
   fresh,
+  pick,
   prime,
 ) where
 
@@ -21,6 +22,9 @@ freshBy _ name = name
 
 fresh :: Set Name -> Name -> Name
 fresh set = freshBy (`member` set)
+
+pick :: Set Name -> Name
+pick set = fresh set (maximum set)
 
 prime :: Name -> Name
 prime (Local i) = Local $ i + 1

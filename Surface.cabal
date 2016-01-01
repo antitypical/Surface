@@ -20,6 +20,7 @@ library
                      , Data.Name
                      , Data.Name.Internal
                      , Data.Term
+                     , Data.Typing
                      , Surface
   build-depends:       base >= 4.7 && < 5
                      , containers
@@ -37,6 +38,8 @@ test-suite Surface-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       Data.Name.Internal.Spec
+                     , Data.Term.Spec
   build-depends:       base
                      , Surface
                      , containers
