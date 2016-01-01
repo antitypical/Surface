@@ -39,5 +39,8 @@ spec = do
     it "renders right-nested function types without parentheses" $
       show (_type' --> _type' --> _type') `shouldBe` "Type → Type → Type"
 
+infer :: Term Expression -> Result (Term Expression)
+infer term = typeOf term mempty
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
