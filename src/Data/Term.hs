@@ -11,7 +11,7 @@ type Result a = Either String a
 
 type Context f = Map.Map String (Term f)
 
-type TypeChecker f = Context f -> Term f -> Result (Term f)
+type TypeChecker f = Context f -> Result (Term f)
 
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Result (Term f), out :: Typing (Binding f) (Term f) }
 
