@@ -43,6 +43,9 @@ spec = do
     it "infers the type of Type" $
       infer _type' `shouldBe` Right (_type 1)
 
+    it "infers the type of `identity`" $
+      typeOf identity mempty `shouldBe` Right (_type' `Surface.pi` (\ a -> a --> a))
+
 infer :: Term Expression -> Result (Term Expression)
 infer term = typeOf term mempty
 
