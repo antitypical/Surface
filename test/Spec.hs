@@ -1,6 +1,6 @@
 import Surface
 import qualified Data.Name.Internal.Spec
-import qualified Data.Term.ShowSpec
+import qualified Data.Term.Spec
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import qualified Data.Set as Set
@@ -8,7 +8,7 @@ import qualified Data.Set as Set
 main :: IO ()
 main = hspec $ do
   describe "Data.Name.Internal" Data.Name.Internal.Spec.spec
-  describe "Data.Term.Show" Data.Term.ShowSpec.spec
+  describe "Data.Term" Data.Term.Spec.spec
 
   describe "lambda" $ do
     it "produces binding abstractons" $

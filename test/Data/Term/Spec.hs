@@ -1,4 +1,4 @@
-module Data.Term.ShowSpec (spec) where
+module Data.Term.Spec (spec) where
 
 import Surface
 import Test.Hspec

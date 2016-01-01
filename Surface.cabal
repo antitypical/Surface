@@ -39,7 +39,7 @@ test-suite Surface-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       Data.Name.Internal.Spec
-                     , Data.Term.ShowSpec
+                     , Data.Term.Spec
   build-depends:       base
                      , Surface
                      , containers
