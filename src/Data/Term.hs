@@ -31,6 +31,9 @@ annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 checkedTyping :: Foldable f => TypeChecker f -> Typing (Binding f) (Term f) -> Term f
 checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
 
+checkedBinding :: Foldable f => TypeChecker f -> Binding f (Term f) -> Term f
+checkedBinding typeChecker b = Term (foldMap freeVariables b) typeChecker $ Binding b
+
 checkedExpression :: Foldable f => TypeChecker f -> f (Term f) -> Term f
 checkedExpression typeChecker e = Term (foldMap freeVariables e) typeChecker (Binding (Expression e))
 
