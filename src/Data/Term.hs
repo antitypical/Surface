@@ -42,6 +42,9 @@ implicit _ = Right $ Term mempty implicit Implicit
 check :: Term f -> Context f -> Term f -> Result (Term f)
 check type' _ _ = Right type'
 
+checkIsType :: Foldable f => Context f -> Term f -> Result (Term f)
+checkIsType = check _type'
+
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b
