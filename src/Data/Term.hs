@@ -44,7 +44,9 @@ implicit = Term mempty (const $ Right implicit) Implicit
 
 -- | Constructs a typechecker which verifies that the given type is inhabited by the given term.
 check :: Term f -> Term f -> TypeChecker f
-check type' _ _ = Right type'
+check type' term context = do
+  actual <- typeOf term context
+  return type'
 
 checkIsType :: Foldable f => Term f -> TypeChecker f
 checkIsType = check _type'
