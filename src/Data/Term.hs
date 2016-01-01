@@ -19,16 +19,16 @@ variable :: Name -> Term f
 variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name scope = Term (Set.delete name $ freeVariables scope) implicit (Binding (Abstraction name scope))
+abstraction name scope = Term (Set.delete name $ freeVariables scope) (const $ Right implicit) (Binding (Abstraction name scope))
 
 annotation :: Foldable f => Term f -> Term f -> Term f
 annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (\ c -> check type' c term) $ Annotation term type'
 
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
-typing t = Term (foldMap freeVariables t) implicit t
+typing t = Term (foldMap freeVariables t) (const $ Right implicit) t
 
 expression :: Foldable f => f (Term f) -> Term f
-expression e = Term (foldMap freeVariables e) implicit (Binding (Expression e))
+expression e = Term (foldMap freeVariables e) (const $ Right implicit) (Binding (Expression e))
 
 _type :: Foldable f => Int -> Term f
 _type n = Term mempty (const . Right . _type $ n + 1) $ Type n
@@ -36,8 +36,8 @@ _type n = Term mempty (const . Right . _type $ n + 1) $ Type n
 _type' :: Foldable f => Term f
 _type' = _type 0
 
-implicit :: TypeChecker f
-implicit _ = Right $ Term mempty implicit Implicit
+implicit :: Term f
+implicit = Term mempty (const $ Right implicit) Implicit
 
 check :: Term f -> Context f -> Term f -> Result (Term f)
 check type' _ _ = Right type'
