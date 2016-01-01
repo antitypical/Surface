@@ -30,6 +30,9 @@ typing t = Term (foldMap freeVariables t) (const $ Right implicit) t
 expression :: Foldable f => f (Term f) -> Term f
 expression e = Term (foldMap freeVariables e) (const $ Right implicit) (Binding (Expression e))
 
+checkedExpression :: Foldable f => f (Term f) -> TypeChecker f -> Term f
+checkedExpression e typeChecker = Term (foldMap freeVariables e) typeChecker (Binding (Expression e))
+
 _type :: Foldable f => Int -> Term f
 _type n = Term mempty (const . Right . _type $ n + 1) $ Type n
 
