@@ -8,28 +8,28 @@ import qualified Data.Set as Set
 
 type Result a = Either String a
 
-data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Maybe (Term f), out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Result (Term f), out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
-variable name = Term (Set.singleton name) Nothing (Binding (Variable name))
+variable name = Term (Set.singleton name) (Right implicit) (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name scope = Term (Set.delete name $ freeVariables scope) Nothing (Binding (Abstraction name scope))
+abstraction name scope = Term (Set.delete name $ freeVariables scope) (Right implicit) (Binding (Abstraction name scope))
 
 annotation :: Foldable f => Term f -> Term f -> Term f
-annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (Just type') $ Annotation term type'
+annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (Right type') $ Annotation term type'
 
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
-typing t = Term (foldMap freeVariables t) Nothing t
+typing t = Term (foldMap freeVariables t) (Right implicit) t
 
 binding :: Foldable f => Binding f (Term f) -> Term f
-binding b = Term (foldMap freeVariables b) Nothing (Binding b)
+binding b = Term (foldMap freeVariables b) (Right implicit) (Binding b)
 
 expression :: Foldable f => f (Term f) -> Term f
 expression e = binding $ Expression e
 
 _type :: Foldable f => Int -> Term f
-_type n = Term mempty (Just . _type $ n + 1) $ Type n
+_type n = Term mempty (Right . _type $ n + 1) $ Type n
 
 _type' :: Foldable f => Term f
 _type' = _type 0
