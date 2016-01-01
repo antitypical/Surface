@@ -54,6 +54,9 @@ apply a b = checkedExpression type' $ Application a b
           operand <- check type' b context
           return $ applySubstitution type' body
 
+annotation :: Foldable f => Term f -> Term f -> Term f
+annotation term type' = checkedTyping (check type' term) $ Annotation term type'
+
 
 unify :: Term Expression -> Term Expression -> Result (Term Expression)
 unify expected actual = if expected == actual

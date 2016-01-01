@@ -25,9 +25,6 @@ abstraction name scope = Term (Set.delete name $ freeVariables scope) (const $ R
 checkedAbstraction :: Name -> Term f -> Term f -> Term f
 checkedAbstraction name type' scope = Term (Set.delete name $ freeVariables scope) (typeOf scope . Map.insert name type') (Binding (Abstraction name scope))
 
-annotation :: Foldable f => Term f -> Term f -> Term f
-annotation term type' = checkedTyping (check type' term) $ Annotation term type'
-
 checkedTyping :: Foldable f => TypeChecker f -> Typing (Binding f) (Term f) -> Term f
 checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
 
