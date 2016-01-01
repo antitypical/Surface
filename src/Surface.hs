@@ -103,6 +103,8 @@ instance Show (Term Expression) where
     Binding (Expression (Lambda (_, type') (Term _ _ (Binding (Abstraction _ _)), body))) -> ("λ _ : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
     Binding (Expression (Lambda (_, type') (_, body))) -> (wrap 3 (<) type' ++ " → " ++ wrap 3 (<=) body, 3)
 
+    Implicit -> ("_", maxBound)
+
     :: (String, Int))
     where wrap i op (s, j) | i `op` j = s
           wrap i _ (s, _) = "(" ++ s ++ ")"
