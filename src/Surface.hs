@@ -58,6 +58,13 @@ unify expected actual = if expected == actual
     _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
+checkIsFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
+checkIsFunctionType term context = do
+  checkIsType term context
+  (Binding (Expression (Lambda type' body))) <- return $ out term
+  return (type', body)
+
+
 instance Show (Term Expression) where
   show = fst . para (\ b -> case b of
     Binding (Variable n) -> (show n, maxBound)
