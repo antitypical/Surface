@@ -1,4 +1,3 @@
-import Data.Name.Internal
 import Surface
 import qualified NameSpec
 import qualified Data.Term.ShowSpec
