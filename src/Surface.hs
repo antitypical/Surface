@@ -17,9 +17,10 @@ import qualified Data.Maybe as Maybe
 import qualified Data.Set as Set
 
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-lambda t f = expression . Lambda t $ abstraction name body
-  where body = f $ variable name
-        name = maybe (Local 0) prime $ maxBoundVariable body
+lambda t f = Term (freeVariables t `mappend` freeVariables body) (Right implicit) $ Binding $ Expression $ Lambda t body
+  where body = abstraction name scope
+        scope = f $ variable name
+        name = maybe (Local 0) prime $ maxBoundVariable scope
 
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Lambda a b
