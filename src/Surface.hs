@@ -60,8 +60,7 @@ unify expected actual = if expected == actual
 
 checkIsFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
 checkIsFunctionType term context = do
-  checkIsType term context
-  (Binding (Expression (Lambda type' body))) <- return $ out term
+  (Binding (Expression (Lambda type' body))) <- out <$> checkIsType term context
   return (type', body)
 
 
