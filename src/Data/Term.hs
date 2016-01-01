@@ -46,6 +46,7 @@ _type' = _type 0
 implicit :: Term f
 implicit = Term mempty (const $ Right implicit) Implicit
 
+-- | Constructs a typechecker which verifies that the given type is inhabited by the given term.
 check :: Term f -> Term f -> TypeChecker f
 check type' _ _ = Right type'
 
