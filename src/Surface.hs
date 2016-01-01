@@ -35,6 +35,10 @@ unify expected actual = if expected == actual
   then Right expected
   else case (out expected, out actual) of
     (t, Implicit) -> Right expected
+    (Binding (Expression (Application a1 b1)), Binding (Expression (Application a2 b2))) -> do
+      a <- unify a1 a2
+      b <- unify b1 b2
+      return $ apply a b
     _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
