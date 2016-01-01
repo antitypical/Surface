@@ -47,6 +47,9 @@ spec = do
     it "infers the type of `identity`" $
       infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
 
+    it "infers the type of `constant`" $
+      infer constant `shouldBe` Right (_type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a)))
+
 infer :: Term Expression -> Result (Term Expression)
 infer term = typeOf term mempty
 
