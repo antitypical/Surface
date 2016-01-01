@@ -4,9 +4,14 @@ import Data.Binding
 import Data.Typing
 import Data.Foldable
 import Data.Name
+import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 type Result a = Either String a
+
+type Context f = Map.Map String (Term f)
+
+type TypeChecker f = Context f -> Term f -> Result (Term f)
 
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Result (Term f), out :: Typing (Binding f) (Term f) }
 

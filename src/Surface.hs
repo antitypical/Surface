@@ -12,7 +12,6 @@ import Data.Name as Surface'
 import Data.Name.Internal
 import Data.Term as Surface'
 import Data.Typing as Surface'
-import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
 import qualified Data.Set as Set
 
@@ -32,10 +31,6 @@ a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Exp
 apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
-
-type Context = Map.Map String (Term Expression)
-
-type TypeChecker = Context -> Term Expression -> Result (Term Expression)
 
 check :: Term Expression -> Term Expression -> Result (Term Expression)
 check term type' = typeOf term >>= unify type'
