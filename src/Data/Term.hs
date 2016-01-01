@@ -66,6 +66,11 @@ substitute name with (Term _ _ binding) = case binding of
           body' = substitute name with (rename name name' body)
   Binding (Expression body) -> expression $ substitute name with <$> body
 
+extendContext :: Name -> Term f -> Context f -> Term f -> Context f
+extendContext name type' context (Term _ _ binding) = case binding of
+  Binding (Abstraction name scope) -> Map.insert name type' context
+  _ -> context
+
 cata :: Functor f => (Typing (Binding f) a -> a) -> Term f -> a
 cata f = f . fmap (cata f) . out
 
