@@ -5,6 +5,7 @@ module Surface (
   Surface.pi,
   (-->),
   apply,
+  checkHasFunctionType,
 ) where
 
 import Data.Binding as Surface'
