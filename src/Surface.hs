@@ -5,6 +5,7 @@ module Surface (
   Surface.pi,
   (-->),
   apply,
+  annotation,
   checkHasFunctionType,
 ) where
 
