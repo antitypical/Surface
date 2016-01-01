@@ -51,3 +51,6 @@ infer term = typeOf term mempty
 
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
+
+constant :: Term Expression
+constant = lambda _type' $ \ a -> lambda _type' $ \ b -> lambda a $ \ a' -> lambda b $ const a'
