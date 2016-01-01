@@ -34,6 +34,9 @@ _type n = Term mempty (Just . _type $ n + 1) $ Type n
 _type' :: Foldable f => Term f
 _type' = _type 0
 
+implicit :: Term f
+implicit = Term mempty (Right implicit) Implicit
+
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b
