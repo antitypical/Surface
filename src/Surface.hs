@@ -30,8 +30,8 @@ lambda t f = Term (freeVariables t `mappend` freeVariables body) type' $ Binding
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Lambda a b
   where type' context = do
-          left <- typeOf a context
-          right <- typeOf b context
+          left <- typeOf a context >>= check _type' context
+          right <- typeOf b context >>= check _type' context
           return $ left --> right
 
 apply :: Term Expression -> Term Expression -> Term Expression
