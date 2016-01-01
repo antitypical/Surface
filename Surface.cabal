@@ -17,6 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Data.Binding
                      , Data.Expression
+                     , Data.Module
                      , Data.Name
                      , Data.Name.Internal
                      , Data.Term
