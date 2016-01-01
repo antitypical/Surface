@@ -22,7 +22,7 @@ abstraction :: Name -> Term f -> Term f
 abstraction name scope = Term (Set.delete name $ freeVariables scope) implicit (Binding (Abstraction name scope))
 
 annotation :: Foldable f => Term f -> Term f -> Term f
-annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (check term type') $ Annotation term type'
+annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (check type' term) $ Annotation term type'
 
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
 typing t = Term (foldMap freeVariables t) implicit t
@@ -40,7 +40,7 @@ implicit :: TypeChecker f
 implicit _ = Right $ Term mempty implicit Implicit
 
 check :: Term f -> Term f -> TypeChecker f
-check _ type' = const $ Right type'
+check type' _ = const $ Right type'
 
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
