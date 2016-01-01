@@ -6,6 +6,7 @@ module Surface (
   (-->),
   apply,
   annotation,
+  unify,
   checkHasFunctionType,
 ) where
 
