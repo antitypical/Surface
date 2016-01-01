@@ -51,6 +51,9 @@ check type' term context = do
 checkIsType :: Foldable f => Term f -> TypeChecker f
 checkIsType = check _type'
 
+unify' :: Term f -> Term f -> Result (Term f)
+unify' _ _ = Left "unimplemented"
+
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b
