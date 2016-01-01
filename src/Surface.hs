@@ -26,6 +26,15 @@ a --> b = expression $ Lambda a b
 apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
+
+unify :: Term Expression -> Term Expression -> Result (Term Expression)
+unify expected actual = if expected == actual
+  then Right expected
+  else case (out expected, out actual) of
+    (t, Implicit) -> Right expected
+    _ -> Left $ "could not unify '" ++ show actual ++"' with expected type '" ++ show expected ++ "'"
+
+
 instance Show (Term Expression) where
   show = fst . para (\ b -> case b of
     Binding (Variable n) -> (show n, maxBound)
