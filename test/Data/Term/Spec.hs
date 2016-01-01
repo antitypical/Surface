@@ -36,5 +36,8 @@ spec = do
     it "renders lambdas without abstractions as function types" $
       show (_type' --> _type') `shouldBe` "Type → Type"
 
+    it "renders right-nested function types without parentheses" $
+      show (_type' --> _type' --> _type') `shouldBe` "Type → Type → Type"
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
