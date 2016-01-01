@@ -23,9 +23,8 @@ lambda t f = Term (freeVariables t `mappend` freeVariables body) type' $ Binding
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
         type' context = do
-          t' <- checkIsType context t
-          body' <- typeOf body (Map.insert name t' context)
-          return $ t' --> body'
+          body' <- typeOf body (Map.insert name t context)
+          return $ t --> body'
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
