@@ -12,7 +12,7 @@ main = hspec $ do
 
   describe "lambda" $ do
     it "produces binding abstractions" $
-      lambda (typing $ Type 0) id `shouldBe` Term mempty (Right implicit) (Binding $ Expression $ Lambda (Term mempty (Right implicit) $ Type 0) (Term mempty (Right implicit) $ Binding $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) (Right implicit) (Binding $ Variable $ Local 0)))
+      lambda (typing $ Type 0) id `shouldBe` Term mempty implicit (Binding $ Expression $ Lambda (Term mempty implicit $ Type 0) (Term mempty implicit $ Binding $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) implicit (Binding $ Variable $ Local 0)))
 
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id

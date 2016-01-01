@@ -13,31 +13,31 @@ type Context f = Map.Map String (Term f)
 
 type TypeChecker f = Context f -> Result (Term f)
 
-data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Result (Term f), out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker f, out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
-variable name = Term (Set.singleton name) (Right implicit) (Binding (Variable name))
+variable name = Term (Set.singleton name) implicit (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name scope = Term (Set.delete name $ freeVariables scope) (Right implicit) (Binding (Abstraction name scope))
+abstraction name scope = Term (Set.delete name $ freeVariables scope) implicit (Binding (Abstraction name scope))
 
 annotation :: Foldable f => Term f -> Term f -> Term f
-annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (Right type') $ Annotation term type'
+annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (check term type') $ Annotation term type'
 
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
-typing t = Term (foldMap freeVariables t) (Right implicit) t
+typing t = Term (foldMap freeVariables t) implicit t
 
 expression :: Foldable f => f (Term f) -> Term f
-expression e = Term (foldMap freeVariables e) (Right implicit) (Binding (Expression e))
+expression e = Term (foldMap freeVariables e) implicit (Binding (Expression e))
 
 _type :: Foldable f => Int -> Term f
-_type n = Term mempty (Right . _type $ n + 1) $ Type n
+_type n = Term mempty (const . Right . _type $ n + 1) $ Type n
 
 _type' :: Foldable f => Term f
 _type' = _type 0
 
-implicit :: Term f
-implicit = Term mempty (Right implicit) Implicit
+implicit :: TypeChecker f
+implicit _ = Right $ Term mempty implicit Implicit
 
 check :: Term f -> Term f -> TypeChecker f
 check _ type' = const $ Right type'
