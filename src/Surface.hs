@@ -35,7 +35,11 @@ a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Exp
           return $ a' --> b'
 
 apply :: Term Expression -> Term Expression -> Term Expression
-apply a b = expression $ Application a b
+apply a b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Application a b
+  where type' context = do
+          (type', body) <- checkHasFunctionType a context
+          operand <- check type' b context
+          return $ applySubstitution type' body
 
 
 unify :: Term Expression -> Term Expression -> Result (Term Expression)
