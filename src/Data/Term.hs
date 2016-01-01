@@ -67,7 +67,7 @@ rename old new term@(Term _ type' binding) = case binding of
   Implicit -> term
 
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
-substitute name with (Term _ type' binding) = case binding of
+substitute name with term@(Term _ type' binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
     where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
@@ -75,6 +75,7 @@ substitute name with (Term _ type' binding) = case binding of
   Binding (Expression body) -> checkedExpression type' $ substitute name with <$> body
   Annotation a b -> let a' = substitute name with a
                         b' = substitute name with b in checkedTyping (check b' a') (Annotation a' b')
+  Type _ -> term
 
 applySubstitution :: (Foldable f, Functor f) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
