@@ -1,5 +1,5 @@
 import Surface
-import qualified NameSpec
+import qualified Data.Name.Internal.Spec
 import qualified Data.Term.ShowSpec
 import Test.Hspec
 import Test.Hspec.QuickCheck
@@ -7,7 +7,7 @@ import qualified Data.Set as Set
 
 main :: IO ()
 main = hspec $ do
-  describe "Name" NameSpec.spec
+  describe "Data.Name.Internal" Data.Name.Internal.Spec.spec
   describe "Data.Term.Show" Data.Term.ShowSpec.spec
 
   describe "lambda" $ do

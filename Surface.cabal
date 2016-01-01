@@ -38,7 +38,7 @@ test-suite Surface-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       NameSpec
+  other-modules:       Data.Name.Internal.Spec
                      , Data.Term.ShowSpec
   build-depends:       base
                      , Surface

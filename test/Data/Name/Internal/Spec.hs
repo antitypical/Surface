@@ -1,4 +1,4 @@
-module NameSpec where
+module Data.Name.Internal.Spec where
 
 import Data.Name.Internal
 import Test.Hspec
