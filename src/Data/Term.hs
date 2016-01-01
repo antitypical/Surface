@@ -22,9 +22,6 @@ annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap
 typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
 typing t = Term (foldMap freeVariables t) (Right implicit) t
 
-binding :: Foldable f => Binding f (Term f) -> Term f
-binding b = Term (foldMap freeVariables b) (Right implicit) (Binding b)
-
 expression :: Foldable f => f (Term f) -> Term f
 expression e = Term (foldMap freeVariables e) (Right implicit) (Binding (Expression e))
 
