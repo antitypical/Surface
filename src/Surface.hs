@@ -47,6 +47,10 @@ unify expected actual = if expected == actual
       type' <- unify type1 type2
       body <- unify body1 body2
       return $ expression $ Lambda type' body
+    (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> do
+      let name = pick (freeVariables expected `mappend` freeVariables actual)
+      scope <- unify (rename name1 name scope1) (rename name2 name scope2)
+      return $ binding $ Abstraction name scope
     _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
