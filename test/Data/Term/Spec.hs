@@ -39,6 +39,10 @@ spec = do
     it "renders right-nested function types without parentheses" $
       show (_type' --> _type' --> _type') `shouldBe` "Type → Type → Type"
 
+  describe "typeOf" $ do
+    it "infers the type of Type" $
+      typeOf (_type' :: Term Expression) mempty `shouldBe` Right (_type 1)
+
 infer :: Term Expression -> Result (Term Expression)
 infer term = typeOf term mempty
 
