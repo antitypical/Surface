@@ -38,6 +38,8 @@ pi t f = checkedExpression type' $ Lambda t body
           body' <- checkIsType body (Map.insert name t context)
           return $ t --> body'
 
+infixr -->
+
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = checkedExpression type' $ Lambda a b
