@@ -9,7 +9,7 @@ import qualified Data.Set as Set
 
 type Result a = Either String a
 
-type Context f = Map.Map String (Term f)
+type Context f = Map.Map Name (Term f)
 
 type TypeChecker f = Context f -> Result (Term f)
 
