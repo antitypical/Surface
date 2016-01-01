@@ -34,6 +34,8 @@ apply a b = expression $ Application a b
 
 type Context = Map.Map String (Term Expression)
 
+type TypeChecker = Context -> Term Expression -> Result (Term Expression)
+
 check :: Term Expression -> Term Expression -> Result (Term Expression)
 check term type' = typeOf term >>= unify type'
 
