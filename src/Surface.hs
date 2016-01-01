@@ -25,6 +25,7 @@ lambda t f = Term (freeVariables t `mappend` freeVariables body) type' $ Binding
           body' <- typeOf body (Map.insert name t context)
           return $ t --> body'
 
+-- | Construct a non-dependent function type between two types.
 (-->) :: Term Expression -> Term Expression -> Term Expression
 a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Lambda a b
   where type' context = do
