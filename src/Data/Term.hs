@@ -16,7 +16,7 @@ type TypeChecker f = Context f -> Result (Term f)
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker f, out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
-variable name = Term (Set.singleton name) implicit (Binding (Variable name))
+variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
 abstraction name scope = Term (Set.delete name $ freeVariables scope) implicit (Binding (Abstraction name scope))
