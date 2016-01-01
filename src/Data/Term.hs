@@ -73,6 +73,8 @@ substitute name with (Term _ type' binding) = case binding of
     where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
           scope' = substitute name with (rename name name' scope)
   Binding (Expression body) -> checkedExpression type' $ substitute name with <$> body
+  Annotation a b -> let a' = substitute name with a
+                        b' = substitute name with b in checkedTyping (check b' a') (Annotation a' b')
 
 applySubstitution :: (Foldable f, Functor f) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
