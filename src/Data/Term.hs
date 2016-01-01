@@ -24,9 +24,6 @@ abstraction name scope = Term (Set.delete name $ freeVariables scope) (const $ R
 annotation :: Foldable f => Term f -> Term f -> Term f
 annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (check type' term) $ Annotation term type'
 
-typing :: Foldable f => Typing (Binding f) (Term f) -> Term f
-typing t = Term (foldMap freeVariables t) (const $ Right implicit) t
-
 checkedExpression :: Foldable f => TypeChecker f -> f (Term f) -> Term f
 checkedExpression typeChecker e = Term (foldMap freeVariables e) typeChecker (Binding (Expression e))
 
