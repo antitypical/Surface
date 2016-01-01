@@ -41,7 +41,7 @@ spec = do
 
   describe "typeOf" $ do
     it "infers the type of Type" $
-      typeOf (_type' :: Term Expression) mempty `shouldBe` Right (_type 1)
+      infer _type' `shouldBe` Right (_type 1)
 
 infer :: Term Expression -> Result (Term Expression)
 infer term = typeOf term mempty
