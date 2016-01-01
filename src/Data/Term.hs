@@ -56,10 +56,10 @@ maxBoundVariable = cata $ \ t -> case t of
   _ -> Nothing
 
 rename :: (Foldable f, Functor f) => Name -> Name -> Term f -> Term f
-rename old new (Term _ _ binding) = case binding of
+rename old new (Term _ type' binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else variable old
   Binding (Abstraction name body) -> if name == old then abstraction name body else abstraction name (rename old new body)
-  Binding (Expression body) -> expression $ rename old new <$> body
+  Binding (Expression body) -> checkedExpression type' $ rename old new <$> body
 
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
 substitute name with (Term _ _ binding) = case binding of
