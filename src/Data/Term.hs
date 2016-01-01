@@ -61,9 +61,9 @@ rename old new (Term _ _ binding) = case binding of
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
 substitute name with (Term _ _ binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
-  Binding (Abstraction name body) -> abstraction name' body'
-    where name' = fresh (Set.union (freeVariables body) (freeVariables with)) name
-          body' = substitute name with (rename name name' body)
+  Binding (Abstraction name scope) -> abstraction name' scope'
+    where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
+          scope' = substitute name with (rename name name' scope)
   Binding (Expression body) -> expression $ substitute name with <$> body
 
 applySubstitution :: (Foldable f, Functor f) => Term f -> Term f -> Term f
