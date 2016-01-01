@@ -53,7 +53,7 @@ apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = checkedExpression type' $ Application a b
   where type' context = do
           (type', body) <- checkHasFunctionType a context
-          operand <- check type' b context
+          _ <- check type' b context
           return $ applySubstitution type' body
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
@@ -65,7 +65,7 @@ unify :: Term Expression -> Term Expression -> Result (Term Expression)
 unify expected actual = if expected == actual
   then Right expected
   else case (out expected, out actual) of
-    (t, Implicit) -> Right expected
+    (_, Implicit) -> Right expected
     (Binding (Expression (Application a1 b1)), Binding (Expression (Application a2 b2))) -> do
       a <- unify a1 a2
       b <- unify b1 b2
