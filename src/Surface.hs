@@ -28,7 +28,7 @@ lambda t f = Term (freeVariables t `mappend` freeVariables body) type' $ Binding
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
-a --> b = Term (freeVariables a `mappend` freeVariables b) type' $ Binding $ Expression $ Lambda a b
+a --> b = checkedExpression type' $ Lambda a b
   where type' context = do
           a' <- checkIsType a context
           b' <- checkIsType b context
