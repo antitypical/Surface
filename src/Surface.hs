@@ -58,8 +58,8 @@ unify expected actual = if expected == actual
     _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
-checkIsFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
-checkIsFunctionType term context = do
+checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
+checkHasFunctionType term context = do
   (Binding (Expression (Lambda type' body))) <- out <$> checkIsType term context
   return (type', body)
 
