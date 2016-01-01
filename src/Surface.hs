@@ -27,6 +27,9 @@ apply :: Term Expression -> Term Expression -> Term Expression
 apply a b = expression $ Application a b
 
 
+check :: Term Expression -> Term Expression -> Result (Term Expression)
+check term type' = typeOf term >>= unify type'
+
 unify :: Term Expression -> Term Expression -> Result (Term Expression)
 unify expected actual = if expected == actual
   then Right expected
