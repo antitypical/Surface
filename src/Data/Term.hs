@@ -64,6 +64,7 @@ rename old new term@(Term _ type' binding) = case binding of
   Annotation a b -> let a' = rename old new a
                         b' = rename old new b in checkedTyping (check b' a') (Annotation a' b')
   Type _ -> term
+  Implicit -> term
 
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
 substitute name with (Term _ type' binding) = case binding of
