@@ -104,6 +104,7 @@ instance Show (Term Expression) where
     Binding (Expression (Lambda (_, type') (_, body))) -> (wrap 3 (<) type' ++ " → " ++ wrap 3 (<=) body, 3)
 
     Implicit -> ("_", maxBound)
+    Annotation (_, term) (_, type') -> (wrap 3 (<=) term ++ " : " ++ wrap 3 (<) type', 3)
 
     :: (String, Int))
     where wrap i op (s, j) | i `op` j = s
