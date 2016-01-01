@@ -28,6 +28,9 @@ checkedAbstraction name type' scope = Term (Set.delete name $ freeVariables scop
 annotation :: Foldable f => Term f -> Term f -> Term f
 annotation term type' = Term (foldMap freeVariables (out term) `mappend` foldMap freeVariables (out type')) (check type' term) $ Annotation term type'
 
+checkedTyping :: Foldable f => TypeChecker f -> Typing (Binding f) (Term f) -> Term f
+checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
+
 checkedExpression :: Foldable f => TypeChecker f -> f (Term f) -> Term f
 checkedExpression typeChecker e = Term (foldMap freeVariables e) typeChecker (Binding (Expression e))
 
