@@ -39,6 +39,9 @@ _type' = _type 0
 implicit :: Term f
 implicit = Term mempty (Right implicit) Implicit
 
+check :: Term f -> Term f -> TypeChecker f
+check _ type' = const $ Right type'
+
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b
