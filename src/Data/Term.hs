@@ -62,12 +62,12 @@ rename old new (Term _ type' binding) = case binding of
   Binding (Expression body) -> checkedExpression type' $ rename old new <$> body
 
 substitute :: (Foldable f, Functor f) => Name -> Term f -> Term f -> Term f
-substitute name with (Term _ _ binding) = case binding of
+substitute name with (Term _ type' binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
     where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
           scope' = substitute name with (rename name name' scope)
-  Binding (Expression body) -> expression $ substitute name with <$> body
+  Binding (Expression body) -> checkedExpression type' $ substitute name with <$> body
 
 applySubstitution :: (Foldable f, Functor f) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
