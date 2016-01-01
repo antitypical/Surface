@@ -2,7 +2,6 @@ import Surface
 import qualified Data.Name.Internal.Spec
 import qualified Data.Term.Spec
 import Test.Hspec
-import Test.Hspec.QuickCheck
 import qualified Data.Set as Set
 
 main :: IO ()
