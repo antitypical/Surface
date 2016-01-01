@@ -43,6 +43,10 @@ unify expected actual = if expected == actual
       a <- unify a1 a2
       b <- unify b1 b2
       return $ apply a b
+    (Binding (Expression (Lambda type1 body1)), Binding (Expression (Lambda type2 body2))) -> do
+      type' <- unify type1 type2
+      body <- unify body1 body2
+      return $ expression $ Lambda type' body
     _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
