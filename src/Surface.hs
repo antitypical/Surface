@@ -16,6 +16,7 @@ import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
 import qualified Data.Set as Set
 
+-- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 lambda t f = Term (freeVariables t `mappend` freeVariables body) type' $ Binding $ Expression $ Lambda t body
   where body = abstraction name scope
