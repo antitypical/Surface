@@ -81,7 +81,7 @@ applySubstitution withTerm body = case out body of
 
 extendContext :: Term f -> Context f -> Term f -> Context f
 extendContext type' context (Term _ _ binding) = case binding of
-  Binding (Abstraction name scope) -> Map.insert name type' context
+  Binding (Abstraction name _) -> Map.insert name type' context
   _ -> context
 
 cata :: Functor f => (Typing (Binding f) a -> a) -> Term f -> a
