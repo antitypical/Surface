@@ -16,7 +16,6 @@ import Data.Name.Internal
 import Data.Term as Surface'
 import Data.Typing as Surface'
 import Data.Unification as Surface'
-import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
