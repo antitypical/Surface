@@ -1,8 +1,8 @@
 module Data.Term where
 
 import Data.Binding
-import Data.Typing
 import Data.Name
+import Data.Typing
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
