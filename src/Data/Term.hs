@@ -124,5 +124,5 @@ instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Uni
       else do
         let name = pick $ freeVariables scope1 `mappend` freeVariables scope2 `mappend` Set.singleton name1 `mappend` Set.singleton name2
         scope <- unify (rename name1 name scope1) (rename name2 name scope2)
-        return $ checkedAbstraction name (byUnifying (typeOf expected) (typeOf actual)) scope
+        return $ checkedAbstraction name (byUnifying (typeOf expected) (typeOf actual)) (rename name name1 scope)
     _ -> Nothing
