@@ -20,7 +20,7 @@ variable :: Name -> Term f
 variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name scope = Term (Set.delete name $ freeVariables scope) (const $ Right implicit) (Binding (Abstraction name scope))
+abstraction name scope = Term (Set.delete name $ freeVariables scope) (typeOf scope) (Binding (Abstraction name scope))
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
 annotation :: (Functor f, Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
