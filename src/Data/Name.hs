@@ -8,10 +8,9 @@ module Data.Name (
 
 import Data.Name.Internal
 import Data.Set
-import qualified Data.Data as Data
 
 data Name = Local Int | Global String
-  deriving (Eq, Ord, Data.Typeable)
+  deriving (Eq, Ord)
 
 instance Show Name where
   show (Local i) = showNumeral "abcdefghijklmnopqrstuvwxyz" i
