@@ -8,4 +8,4 @@ data Typing f term
   | Annotation term term
   | Binding (f term)
   | Implicit
-  deriving (Show, Eq, Functor, Foldable, Data.Typeable, Data.Data)
+  deriving (Show, Eq, Functor, Foldable, Data.Typeable)
