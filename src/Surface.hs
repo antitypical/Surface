@@ -8,6 +8,7 @@ module Surface (
   checkHasFunctionType,
 ) where
 
+import Prelude hiding (pi)
 import Data.Binding as Surface'
 import Data.Expression as Surface'
 import Data.Name as Surface'
@@ -42,7 +43,7 @@ pi t f = checkedExpression type' $ Lambda t body
         type' context = do
           _ <- checkIsType t context
           body' <- checkIsType body (Map.insert name t context)
-          return $ t --> body'
+          return $ t `pi` const body'
 
 infixr -->
 
