@@ -58,9 +58,12 @@ spec = do
     it "infers the type of `constant`" $
       infer constant `shouldBe` Right (_type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a)))
 
-  describe "substitute" $
+  describe "substitute" $ do
     prop "is identity on Type" $
       \ name n -> substitute name (_type $ n + 1) (_type n) `shouldBe` (_type n :: Term Expression)
+
+    prop "replaces variables with the same name" $
+      \ name -> substitute name _type' (variable name) `shouldBe` (_type' :: Term Expression)
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
