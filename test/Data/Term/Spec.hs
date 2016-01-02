@@ -93,6 +93,9 @@ spec = do
     prop "transits non-shadowing abstractions" $
       \ name -> rename name (prime name) (abstraction (prime $ prime name) (variable name)) `shouldBe` (abstraction (prime $ prime name) (variable (prime name)) :: Term Expression)
 
+    prop "does not replace shadowed variables" $
+      \ name -> rename name (prime name) (abstraction name (variable name)) `shouldBe` (abstraction name (variable name) :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
