@@ -3,6 +3,13 @@ module Data.Term.Spec (spec) where
 import Prelude hiding (pi)
 import Surface
 import Test.Hspec
+import Test.QuickCheck
+
+instance Arbitrary Name where
+  arbitrary = oneof [
+      Local <$> arbitrary,
+      Global <$> arbitrary
+    ]
 
 spec :: Spec
 spec = do
