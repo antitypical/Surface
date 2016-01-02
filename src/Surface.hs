@@ -26,6 +26,7 @@ lambda t f = checkedExpression type' $ Lambda t body
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
         type' context = do
+          _ <- checkIsType t context
           body' <- typeOf body (Map.insert name t context)
           return $ t --> body'
 
