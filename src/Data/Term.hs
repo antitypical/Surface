@@ -1,8 +1,10 @@
+{-# LANGUAGE UndecidableInstances #-}
 module Data.Term where
 
 import Data.Binding
 import Data.Name
 import Data.Typing
+import Data.Unification
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -99,3 +101,10 @@ cata f = f . fmap (cata f) . out
 para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
+
+
+instance Unifiable (f (Term f)) => Unifiable (Term f) where
+  unify a b = case (out a, out b) of
+    (_, Implicit) -> Just a
+    (Implicit, _) -> Just b
+    _ -> Nothing
