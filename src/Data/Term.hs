@@ -60,7 +60,7 @@ maxBoundVariable = cata $ \ t -> case t of
   Binding (Expression e) -> maximum e
   _ -> Nothing
 
-rename :: (Foldable f, Functor f, Unifiable (Term f)) => Name -> Name -> Term f -> Term f
+rename :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Name -> Name -> Term f -> Term f
 rename old new term@(Term _ type' binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else variable old
   Binding (Abstraction name body) -> if name == old then abstraction name body else abstraction name (rename old new body)
@@ -70,7 +70,7 @@ rename old new term@(Term _ type' binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-substitute :: (Foldable f, Functor f, Unifiable (Term f)) => Name -> Term f -> Term f -> Term f
+substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Name -> Term f -> Term f -> Term f
 substitute name with term@(Term _ type' binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
@@ -82,7 +82,7 @@ substitute name with term@(Term _ type' binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-applySubstitution :: (Foldable f, Functor f, Unifiable (Term f)) => Term f -> Term f -> Term f
+applySubstitution :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
   Binding (Abstraction name inScope) -> substitute name withTerm inScope
   _ -> body
@@ -100,8 +100,10 @@ para f = f . fmap fanout . out
   where fanout a = (a, para f a)
 
 
-instance Unifiable (f (Term f)) => Unifiable (Term f) where
-  unify expected actual = case (out expected, out actual) of
-    (_, Implicit) -> Just expected
-    (Implicit, _) -> Just actual
-    _ -> Nothing
+instance (Eq (Term f), Unifiable (f (Term f))) => Unifiable (Term f) where
+  unify expected actual = if expected == actual
+    then Just expected
+    else case (out expected, out actual) of
+      (_, Implicit) -> Just expected
+      (Implicit, _) -> Just actual
+      _ -> Nothing
