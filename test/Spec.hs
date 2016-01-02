@@ -13,6 +13,9 @@ main = hspec $ do
     it "produces binding abstractions" $
       lambda _type' id `shouldBe` Term mempty (const $ Right implicit) (Binding $ Expression $ Lambda _type' (abstraction (Local 0) $ variable (Local 0)))
 
+    it "picks fresh names" $
+      (_type' `lambda` const (_type' `lambda` const _type')) `shouldBe` Term mempty (const $ Right implicit) (Binding $ Expression $ Lambda _type' $ abstraction (Local 1) $ Term mempty (const $ Right implicit) $ Binding $ Expression $ Lambda _type' $ abstraction (Local 0) _type')
+
     it "rejects non-Type types" $
       typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> lambda a' $ const _type') mempty `shouldSatisfy` Either.isLeft
 
