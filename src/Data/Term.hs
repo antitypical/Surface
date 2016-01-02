@@ -117,12 +117,10 @@ instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Uni
     (_, Implicit) -> Just expected
     (Implicit, _) -> Just actual
     (Type _, Type _) -> Just expected
-    (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> if name1 == name2
-      then do
-        scope <- unify scope1 scope2
-        return $ checkedAbstraction name1 (byUnifying (typeOf expected) (typeOf actual)) scope
-      else do
-        let name = pick $ freeVariables scope1 `mappend` freeVariables scope2 `mappend` Set.singleton name1 `mappend` Set.singleton name2
+    (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> do
+        let name = if name1 == name2
+            then name1
+            else pick $ freeVariables scope1 `mappend` freeVariables scope2 `mappend` Set.singleton name1 `mappend` Set.singleton name2
         scope <- unify (rename name1 name scope1) (rename name2 name scope2)
         return $ checkedAbstraction name (byUnifying (typeOf expected) (typeOf actual)) (rename name name1 scope)
     _ -> Nothing
