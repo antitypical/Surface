@@ -106,4 +106,5 @@ instance (Eq (Term f), Unifiable (f (Term f))) => Unifiable (Term f) where
     else case (out expected, out actual) of
       (_, Implicit) -> Just expected
       (Implicit, _) -> Just actual
+      (Type _, Type _) -> Just expected
       _ -> Nothing
