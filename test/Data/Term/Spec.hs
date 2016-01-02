@@ -99,6 +99,9 @@ spec = do
     prop "transits expressions" $
       \ name -> rename name (prime name) (apply (variable name) (variable name)) `shouldBe` apply (variable $ prime name) (variable $ prime name)
 
+    prop "transits annotations" $
+      \ name -> rename name (prime name) (annotation (variable name) (variable name)) `shouldBe` (annotation (variable $ prime name) (variable $ prime name) :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
