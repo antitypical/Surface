@@ -50,7 +50,7 @@ spec = do
     it "infers the type of `constant`" $
       infer constant `shouldBe` Right (_type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a)))
 
-infer :: Term Expression -> Result (Term Expression)
+infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
 identity :: Term Expression
