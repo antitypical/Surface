@@ -52,6 +52,9 @@ spec = do
     it "infers the type of Type" $
       infer _type' `shouldBe` Right (_type 1)
 
+    it "infers the type of functions over types" $
+      infer (_type' --> _type') `shouldBe` Right (_type' --> _type')
+
     it "infers the type of `identity`" $
       infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
 
