@@ -114,9 +114,12 @@ instance Eq (f (Term f)) => Eq (Term f) where
 instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
   unify expected actual = case (out expected, out actual) of
     (a, b) | a == b -> Just expected
+
     (_, Implicit) -> Just expected
     (Implicit, _) -> Just actual
+
     (Type _, Type _) -> Just expected
+
     (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> do
         let name = if name1 == name2
             then name1
@@ -126,4 +129,5 @@ instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Uni
     (Binding (Expression e1), Binding (Expression e2)) -> do
       e <- unify e1 e2
       return $ checkedExpression (byUnifying (typeOf expected) (typeOf actual)) e
+
     _ -> Nothing
