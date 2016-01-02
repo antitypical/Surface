@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 module Data.Name (
   Name(..),
   freshBy,
@@ -11,7 +12,7 @@ import Data.Set
 import qualified Data.Data as Data
 
 data Name = Local Int | Global String
-  deriving (Eq, Ord, Data.Typeable)
+  deriving (Eq, Ord, Data.Typeable, Data.Data)
 
 instance Show Name where
   show (Local i) = showNumeral "abcdefghijklmnopqrstuvwxyz" i
