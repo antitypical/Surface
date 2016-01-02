@@ -21,7 +21,7 @@ import qualified Data.Set as Set
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 lambda t f = checkedExpression type' $ Lambda t body
-  where body = abstraction name scope
+  where body = typedAbstraction name t scope
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
         type' context = do
