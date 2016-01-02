@@ -21,22 +21,22 @@ import qualified Data.Set as Set
 
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-lambda t f = checkedExpression type' $ Lambda t body
+lambda t f = checkedExpression typeChecker $ Lambda t body
   where body = typedAbstraction name t scope
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
-        type' context = do
+        typeChecker context = do
           _ <- checkIsType t context
           body' <- typeOf body (Map.insert name t context)
           return $ t `pi` const body'
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-pi t f = checkedExpression type' $ Lambda t body
+pi t f = checkedExpression typeChecker $ Lambda t body
   where body = typedAbstraction name t scope
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
-        type' context = do
+        typeChecker context = do
           _ <- checkIsType t context
           body' <- checkIsType body (Map.insert name t context)
           return $ t `pi` const body'
@@ -45,8 +45,8 @@ infixr -->
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
-a --> b = checkedExpression type' $ Lambda a b
-  where type' context = do
+a --> b = checkedExpression typeChecker $ Lambda a b
+  where typeChecker context = do
           a' <- checkIsType a context
           b' <- checkIsType b context
           return $ a' --> b'
