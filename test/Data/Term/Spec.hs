@@ -75,7 +75,7 @@ spec = do
       \ name -> substitute name _type' (abstraction name (variable name)) `shouldBe` (abstraction name (variable name) :: Term Expression)
 
     prop "transits expressions" $
-      \ name -> substitute name _type' (apply (variable name) (variable name)) `shouldBe` (apply _type' _type' :: Term Expression)
+      \ name -> substitute name _type' (apply (variable name) (variable name)) `shouldBe` apply _type' _type'
 
     prop "transits annotations" $
       \ name -> substitute name _type' (annotation (variable name) (variable name)) `shouldBe` (annotation _type' _type' :: Term Expression)
