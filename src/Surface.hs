@@ -32,7 +32,7 @@ lambda t f = checkedExpression type' $ Lambda t body
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 pi t f = checkedExpression type' $ Lambda t body
-  where body = abstraction name scope
+  where body = typedAbstraction name t scope
         scope = f $ variable name
         name = maybe (Local 0) prime $ maxBoundVariable scope
         type' context = do
