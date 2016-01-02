@@ -115,6 +115,9 @@ spec = do
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
+inferBinding :: (Name, Term Expression) -> Term Expression -> Either String (Term Expression)
+inferBinding (name, type') term = typeOf term $ Map.singleton name type'
+
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
 
