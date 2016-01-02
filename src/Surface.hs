@@ -23,27 +23,27 @@ infixr `lambda`
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 lambda t f = checkedExpression typeChecker $ Lambda t body
-  where body = typedAbstraction name t scope
-        scope = f $ variable name
-        name = maybe (Local 0) prime $ maxBoundVariable scope
+  where body = abstract f
         typeChecker context = do
           _ <- checkIsType t context
-          body' <- typeOf body (extendContext t context body)
-          return $ t `pi` (`applySubstitution` body')
 
+          bodyType <- typeOf body (extendContext t context body)
+          return $ case shadowing body bodyType of
+            Just name -> t `pi` \ v -> substitute name v bodyType
+            _ -> t --> bodyType
 
 infixr `pi`
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 pi t f = checkedExpression typeChecker $ Lambda t body
-  where body = typedAbstraction name t scope
-        scope = f $ variable name
-        name = maybe (Local 0) prime $ maxBoundVariable scope
+  where body = abstract f
         typeChecker context = do
           _ <- checkIsType t context
-          body' <- checkIsType body (extendContext t context body)
-          return $ t `pi` (`applySubstitution` body')
+          bodyType <- checkIsType body (extendContext t context body)
+          return $ case shadowing body bodyType of
+            Just name -> t `pi` \ v -> substitute name v bodyType
+            _ -> t --> bodyType
 
 infixr -->
 
