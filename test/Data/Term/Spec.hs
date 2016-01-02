@@ -60,7 +60,7 @@ spec = do
 
   describe "substitute" $
     prop "is identity on Type" $
-      \ name -> substitute name (_type 1) _type' `shouldBe` (_type' :: Term Expression)
+      \ name n -> substitute name (_type $ n + 1) (_type n) `shouldBe` (_type n :: Term Expression)
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
