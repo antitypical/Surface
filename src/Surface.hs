@@ -88,6 +88,3 @@ instance Show (Term Expression) where
     :: (String, Int))
     where wrap i op (s, j) | i `op` j = s
           wrap _ _ (s, _) = "(" ++ s ++ ")"
-
-instance Eq (Term Expression) where
-  a == b = freeVariables a == freeVariables b && out a == out b
