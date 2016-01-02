@@ -25,3 +25,6 @@ main = hspec $ do
 
     it "associates to the right" $
       _type' --> _type' --> _type' `shouldBe` _type' --> (_type' --> _type')
+
+    it "is not associative" $
+      (_type' --> _type') --> _type' `shouldNotBe` _type' --> (_type' --> _type')
