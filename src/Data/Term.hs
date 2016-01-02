@@ -80,6 +80,7 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Implicit -> term
 
 substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
+substitute name with term | with == variable name = term
 substitute name with term@(Term _ typeChecker binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction bound scope) -> abstraction name' scope'
