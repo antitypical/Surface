@@ -3,6 +3,7 @@ module Data.Term.Spec (spec) where
 import Prelude hiding (pi)
 import Surface
 import Test.Hspec
+import Test.Hspec.QuickCheck
 import Test.QuickCheck
 
 instance Arbitrary Name where
@@ -56,6 +57,10 @@ spec = do
 
     it "infers the type of `constant`" $
       infer constant `shouldBe` Right (_type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a)))
+
+  describe "substitute" $
+    prop "is identity on Type" $
+      \ name -> substitute name (_type 1) _type' `shouldBe` (_type' :: Term Expression)
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
