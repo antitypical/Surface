@@ -49,6 +49,9 @@ spec = do
     it "renders right-nested function types without parentheses" $
       show (_type' --> _type' --> _type') `shouldBe` "Type → Type → Type"
 
+    it "renders left-nested function types with parentheses" $
+      show ((_type' --> _type') --> _type') `shouldBe` "(Type → Type) → Type"
+
   describe "typeOf" $ do
     prop "infers the type of Type" $
       \ n -> infer (_type n) `shouldBe` Right (_type $ n + 1)
