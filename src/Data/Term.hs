@@ -101,7 +101,7 @@ para f = f . fmap fanout . out
 
 
 instance Unifiable (f (Term f)) => Unifiable (Term f) where
-  unify a b = case (out a, out b) of
-    (_, Implicit) -> Just a
-    (Implicit, _) -> Just b
+  unify expected actual = case (out expected, out actual) of
+    (_, Implicit) -> Just expected
+    (Implicit, _) -> Just actual
     _ -> Nothing
