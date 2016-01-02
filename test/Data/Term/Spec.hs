@@ -60,7 +60,7 @@ spec = do
       infer (_type' `pi` id) `shouldBe` Right (_type' --> _type')
 
     prop "infers the types of variables bound in the context" $
-      \ name -> typeOf (variable name) (Map.singleton name (variable $ prime name)) `shouldBe` Right (variable (prime name) :: Term Expression)
+      \ name -> inferBinding name _type' (variable name) `shouldBe` Right _type'
 
     it "infers the type of `identity`" $
       infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
@@ -115,8 +115,8 @@ spec = do
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
-inferBinding :: (Name, Term Expression) -> Term Expression -> Either String (Term Expression)
-inferBinding (name, type') term = typeOf term $ Map.singleton name type'
+inferBinding :: Name -> Term Expression -> Term Expression -> Either String (Term Expression)
+inferBinding name type' term = typeOf term $ Map.singleton name type'
 
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
