@@ -39,7 +39,7 @@ pi t f = checkedExpression typeChecker $ Lambda t body
         typeChecker context = do
           _ <- checkIsType t context
           body' <- checkIsType body (Map.insert name t context)
-          return $ t `pi` const body'
+          return $ t `pi` \ t' -> applySubstitution t' body'
 
 infixr -->
 
