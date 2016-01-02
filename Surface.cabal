@@ -22,6 +22,7 @@ library
                      , Data.Name.Internal
                      , Data.Term
                      , Data.Typing
+                     , Data.Unification
                      , Surface
   build-depends:       base >= 4.7 && < 5
                      , containers
