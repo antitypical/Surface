@@ -82,7 +82,7 @@ substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) =
 substitute name with term@(Term _ typeChecker binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
-    where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
+    where name' = fresh (Set.union (freeVariables term) (freeVariables with)) name
           scope' = substitute name with (rename name name' scope)
   Binding (Expression body) -> checkedExpression typeChecker $ substitute name with <$> body
   Annotation term' type' -> let term'' = substitute name with term'
