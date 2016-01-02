@@ -77,6 +77,9 @@ spec = do
     prop "transits expressions" $
       \ name -> substitute name _type' (apply (variable name) (variable name)) `shouldBe` (apply _type' _type' :: Term Expression)
 
+    prop "transits annotations" $
+      \ name -> substitute name _type' (annotation (variable name) (variable name)) `shouldBe` (annotation _type' _type' :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
