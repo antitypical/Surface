@@ -18,3 +18,6 @@ main = hspec $ do
   describe "-->" $ do
     it "rejects non-Type parameter types" $
       typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a' --> a) mempty `shouldBe` Left ""
+
+    it "rejects non-Type return types" $
+      typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a --> a') mempty `shouldBe` Left ""
