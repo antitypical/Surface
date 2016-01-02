@@ -5,7 +5,6 @@ module Surface (
   Surface.pi,
   (-->),
   apply,
-  annotation,
   checkHasFunctionType,
 ) where
 
@@ -58,10 +57,6 @@ apply a b = checkedExpression type' $ Application a b
           (type', body) <- checkHasFunctionType a context
           _ <- check type' b context
           return $ applySubstitution type' body
-
--- | Construct the annotation of a term by a type. The term will be checked against this type.
-annotation :: (Functor f, Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
-annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 
 
 checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
