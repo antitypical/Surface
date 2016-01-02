@@ -22,3 +22,6 @@ main = hspec $ do
 
     it "rejects non-Type return types" $
       typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a --> a') mempty `shouldSatisfy` Either.isLeft
+
+    it "associates to the right" $
+      _type' --> _type' --> _type' `shouldBe` _type' --> (_type' --> _type')
