@@ -65,6 +65,9 @@ spec = do
     prop "replaces variables with the same name" $
       \ name -> substitute name _type' (variable name) `shouldBe` (_type' :: Term Expression)
 
+    prop "does not replace other variables" $
+      \ name -> substitute name _type' (variable $ prime name) `shouldBe` (variable (prime name) :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
