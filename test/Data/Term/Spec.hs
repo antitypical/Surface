@@ -80,6 +80,10 @@ spec = do
     prop "transits annotations" $
       \ name -> substitute name _type' (annotation (variable name) (variable name)) `shouldBe` (annotation _type' _type' :: Term Expression)
 
+  describe "rename" $ do
+    prop "replaces identical variables" $
+      \ name -> rename name (prime name) (variable name) `shouldBe` (variable (prime name) :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
