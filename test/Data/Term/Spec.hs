@@ -2,6 +2,7 @@ module Data.Term.Spec (spec) where
 
 import Prelude hiding (pi)
 import Surface
+import qualified Data.Map as Map
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
@@ -57,6 +58,9 @@ spec = do
 
     it "infers the type of pi types" $
       infer (_type' `pi` id) `shouldBe` Right (_type' --> _type')
+
+    prop "infers the types of variables bound in the context" $
+      \ name -> typeOf (variable name) (Map.singleton name (variable $ prime name)) `shouldBe` Right (variable (prime name) :: Term Expression)
 
     it "infers the type of `identity`" $
       infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
