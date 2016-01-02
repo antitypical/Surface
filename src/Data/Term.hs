@@ -63,7 +63,7 @@ maxBoundVariable = cata $ \ t -> case t of
   Binding (Expression e) -> maximum e
   _ -> Nothing
 
-rename :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Name -> Name -> Term f -> Term f
+rename :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Name -> Term f -> Term f
 rename old new term@(Term _ type' binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else variable old
   Binding (Abstraction name body) -> if name == old then abstraction name body else abstraction name (rename old new body)
@@ -73,7 +73,7 @@ rename old new term@(Term _ type' binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Name -> Term f -> Term f -> Term f
+substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
 substitute name with term@(Term _ type' binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
@@ -85,7 +85,7 @@ substitute name with term@(Term _ type' binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-applySubstitution :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (Term f)) => Term f -> Term f -> Term f
+applySubstitution :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
   Binding (Abstraction name inScope) -> substitute name withTerm inScope
   _ -> body
@@ -102,7 +102,7 @@ para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
 
-byUnifying :: (Unifiable (f (Term f)), Eq (Term f)) => TypeChecker f -> TypeChecker f -> TypeChecker f
+byUnifying :: (Unifiable (Term f)) => TypeChecker f -> TypeChecker f -> TypeChecker f
 byUnifying a b context = do
   a' <- a context
   b' <- b context
@@ -112,10 +112,14 @@ instance Eq (f (Term f)) => Eq (Term f) where
   a == b = freeVariables a == freeVariables b && out a == out b
 
 instance (Eq (Term f), Unifiable (f (Term f))) => Unifiable (Term f) where
-  unify expected actual = if expected == actual
-    then Just expected
-    else case (out expected, out actual) of
-      (_, Implicit) -> Just expected
-      (Implicit, _) -> Just actual
-      (Type _, Type _) -> Just expected
-      _ -> Nothing
+  unify expected actual = case (out expected, out actual) of
+    (_, _) | expected == actual -> Just expected
+    (_, Implicit) -> Just expected
+    (Implicit, _) -> Just actual
+    (Type _, Type _) -> Just expected
+    (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> if name1 == name2
+      then do
+        scope <- unify scope1 scope2
+        return $ checkedAbstraction name1 (byUnifying (typeOf expected) (typeOf actual)) scope
+      else Nothing
+    _ -> Nothing
