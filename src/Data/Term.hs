@@ -119,6 +119,10 @@ instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Uni
     (Implicit, _) -> Just actual
 
     (Type _, Type _) -> Just expected
+    (Annotation term1 type1, Annotation term2 type2) -> do
+      term <- unify term1 term2
+      type' <- unify type1 type2
+      return $ checkedTyping (byUnifying (typeOf expected) (typeOf actual)) (Annotation term type')
 
     (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> do
         let name = if name1 == name2
