@@ -49,8 +49,8 @@ spec = do
       show (_type' --> _type' --> _type') `shouldBe` "Type → Type → Type"
 
   describe "typeOf" $ do
-    it "infers the type of Type" $
-      infer _type' `shouldBe` Right (_type 1)
+    prop "infers the type of Type" $
+      \ n -> infer (_type n) `shouldBe` Right (_type $ n + 1)
 
     it "infers the type of functions over types" $
       infer (_type' --> _type') `shouldBe` Right (_type' --> _type')
