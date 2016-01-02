@@ -85,8 +85,8 @@ substitute name with term@(Term _ typeChecker binding) = case binding of
     where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
           scope' = substitute name with (rename name name' scope)
   Binding (Expression body) -> checkedExpression typeChecker $ substitute name with <$> body
-  Annotation a b -> let a' = substitute name with a
-                        b' = substitute name with b in checkedTyping (check b' a') (Annotation a' b')
+  Annotation term' type' -> let term'' = substitute name with term'
+                                type'' = substitute name with type' in annotation term'' type''
   Type _ -> term
   Implicit -> term
 
