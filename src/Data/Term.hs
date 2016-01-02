@@ -81,9 +81,9 @@ rename old new term@(Term _ typeChecker binding) = case binding of
 substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
 substitute name with term@(Term _ typeChecker binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
-  Binding (Abstraction name scope) -> abstraction name' scope'
-    where name' = fresh (Set.union (freeVariables term) (freeVariables with)) name
-          scope' = substitute name with (rename name name' scope)
+  Binding (Abstraction bound scope) -> abstraction name' scope'
+    where name' = fresh (Set.union (freeVariables term) (freeVariables with)) bound
+          scope' = substitute name with (rename bound name' scope)
   Binding (Expression body) -> checkedExpression typeChecker $ substitute name with <$> body
   Annotation term' type' -> let term'' = substitute name with term'
                                 type'' = substitute name with type' in annotation term'' type''
