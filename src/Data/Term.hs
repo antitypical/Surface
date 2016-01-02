@@ -99,6 +99,12 @@ para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
 
+byUnifying :: (Unifiable (f (Term f)), Eq (Term f)) => TypeChecker f -> TypeChecker f -> TypeChecker f
+byUnifying a b context = do
+  a' <- a context
+  b' <- b context
+  maybe (Left "couldn’t unify") Right $ unify a' b'
+
 
 instance (Eq (Term f), Unifiable (f (Term f))) => Unifiable (Term f) where
   unify expected actual = if expected == actual
