@@ -87,6 +87,9 @@ spec = do
     prop "does not replace other variables" $
       \ name -> rename (prime $ prime name) (prime name) (variable name) `shouldBe` (variable name :: Term Expression)
 
+    prop "is identity on Type" $
+      \ name n -> rename name (prime name) (_type n) `shouldBe` (_type n :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
