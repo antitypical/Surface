@@ -107,6 +107,13 @@ extendContext type' context (Term _ _ binding) = case binding of
   Binding (Abstraction name _) -> Map.insert name type' context
   _ -> context
 
+-- | Returns Just the name bound in term1 which shadows a variable free in term2, if any, or Nothing otherwise.
+shadowing :: Term f -> Term f -> Maybe Name
+shadowing term1 term2 = case out term1 of
+  Binding (Abstraction name _) | Set.member name (freeVariables term2) -> Just name
+  _ -> Nothing
+
+
 cata :: Functor f => (Typing (Binding f) a -> a) -> Term f -> a
 cata f = f . fmap (cata f) . out
 
