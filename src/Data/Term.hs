@@ -108,6 +108,8 @@ byUnifying a b context = do
   b' <- b context
   maybe (Left "couldn’t unify") Right $ unify a' b'
 
+instance Eq (f (Term f)) => Eq (Term f) where
+  a == b = freeVariables a == freeVariables b && out a == out b
 
 instance (Eq (Term f), Unifiable (f (Term f))) => Unifiable (Term f) where
   unify expected actual = if expected == actual
