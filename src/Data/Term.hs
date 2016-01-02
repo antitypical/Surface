@@ -142,6 +142,10 @@ instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Uni
             else pick $ freeVariables scope1 `mappend` freeVariables scope2
         scope <- unify (rename name1 name scope1) (rename name2 name scope2)
         return $ checkedAbstraction name (byUnifying (typeOf expected) (typeOf actual)) (rename name name1 scope)
+
+    (Binding (Abstraction name scope), _) | Set.notMember name (freeVariables scope) -> unify scope actual
+    (_, Binding (Abstraction name scope)) | Set.notMember name (freeVariables scope) -> unify expected scope
+
     (Binding (Expression e1), Binding (Expression e2)) -> do
       e <- unify e1 e2
       return $ checkedExpression (byUnifying (typeOf expected) (typeOf actual)) e
