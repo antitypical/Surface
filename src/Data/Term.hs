@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 module Data.Term where
 
 import Data.Binding
@@ -5,6 +6,7 @@ import Data.Typing
 import Data.Name
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+import qualified Data.Data as Data
 
 type Result a = Either String a
 
@@ -13,6 +15,7 @@ type Context f = Map.Map Name (Term f)
 type TypeChecker f = Context f -> Result (Term f)
 
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker f, out :: Typing (Binding f) (Term f) }
+  deriving Data.Typeable
 
 variable :: Name -> Term f
 variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
