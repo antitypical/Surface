@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable, StandaloneDeriving, UndecidableInstances, FlexibleInstances #-}
+{-# LANGUAGE DeriveDataTypeable, StandaloneDeriving, UndecidableInstances #-}
 module Data.Term where
 
 import Data.Binding
