@@ -6,7 +6,6 @@ module Surface (
   (-->),
   apply,
   annotation,
-  unify,
   checkHasFunctionType,
 ) where
 
@@ -16,6 +15,7 @@ import Data.Name as Surface'
 import Data.Name.Internal
 import Data.Term as Surface'
 import Data.Typing as Surface'
+import Data.Unification as Surface'
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -58,32 +58,8 @@ apply a b = checkedExpression type' $ Application a b
           return $ applySubstitution type' body
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
-annotation :: Foldable f => Term f -> Term f -> Term f
+annotation :: (Foldable f, Unifiable (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping (check type' term) $ Annotation term type'
-
-
-unify :: Term Expression -> Term Expression -> Result (Term Expression)
-unify expected actual = if expected == actual
-  then Right expected
-  else case (out expected, out actual) of
-    (_, Implicit) -> Right expected
-    (Binding (Expression (Application a1 b1)), Binding (Expression (Application a2 b2))) -> do
-      a <- unify a1 a2
-      b <- unify b1 b2
-      return $ apply a b
-    (Binding (Expression (Lambda type1 body1)), Binding (Expression (Lambda type2 body2))) -> do
-      type' <- unify type1 type2
-      body <- unify body1 body2
-      let metatype context = do
-            metatype1 <- typeOf expected context
-            metatype2 <- typeOf actual context
-            unify metatype1 metatype2
-      return $ checkedExpression metatype $ Lambda type' body
-    (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> do
-      let name = pick (freeVariables expected `mappend` freeVariables actual)
-      scope <- unify (rename name1 name scope1) (rename name2 name scope2)
-      return $ abstraction name scope
-    _ -> Left $ "could not unify '" ++ show actual ++ "' with expected type '" ++ show expected ++ "'"
 
 
 checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
