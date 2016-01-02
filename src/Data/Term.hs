@@ -27,7 +27,7 @@ checkedAbstraction name typeChecker scope = Term (Set.delete name $ freeVariable
 
 -- | Constructs an abstraction term with a name, the type of that name, and the scope which the name is available within.
 typedAbstraction :: Name -> Term f -> Term f -> Term f
-typedAbstraction name type' scope = Term (Set.delete name $ freeVariables scope) (typeOf scope . Map.insert name type') (Binding (Abstraction name scope))
+typedAbstraction name type' scope = checkedAbstraction name (typeOf scope . Map.insert name type') scope
 
 checkedTyping :: Foldable f => TypeChecker f -> Typing (Binding f) (Term f) -> Term f
 checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
