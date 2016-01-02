@@ -69,10 +69,10 @@ maxBoundVariable = cata $ \ t -> case t of
   _ -> Nothing
 
 rename :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Name -> Term f -> Term f
-rename old new term@(Term _ type' binding) = case binding of
+rename old new term@(Term _ typeChecker binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else variable old
   Binding (Abstraction name scope) -> if name == old then term else abstraction name (rename old new scope)
-  Binding (Expression body) -> checkedExpression type' $ rename old new <$> body
+  Binding (Expression body) -> checkedExpression typeChecker $ rename old new <$> body
   Annotation a b -> let a' = rename old new a
                         b' = rename old new b in checkedTyping (check b' a') (Annotation a' b')
   Type _ -> term
