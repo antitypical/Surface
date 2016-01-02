@@ -81,14 +81,14 @@ spec = do
       \ name -> substitute name _type' (annotation (variable name) (variable name)) `shouldBe` (annotation _type' _type' :: Term Expression)
 
   describe "rename" $ do
+    prop "is identity on Type" $
+      \ name n -> rename name (prime name) (_type n) `shouldBe` (_type n :: Term Expression)
+
     prop "replaces identical variables" $
       \ name -> rename name (prime name) (variable name) `shouldBe` (variable (prime name) :: Term Expression)
 
     prop "does not replace other variables" $
       \ name -> rename (prime $ prime name) (prime name) (variable name) `shouldBe` (variable name :: Term Expression)
-
-    prop "is identity on Type" $
-      \ name n -> rename name (prime name) (_type n) `shouldBe` (_type n :: Term Expression)
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
