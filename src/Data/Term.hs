@@ -79,12 +79,12 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Implicit -> term
 
 substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
-substitute name with term@(Term _ type' binding) = case binding of
+substitute name with term@(Term _ typeChecker binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction name scope) -> abstraction name' scope'
     where name' = fresh (Set.union (freeVariables scope) (freeVariables with)) name
           scope' = substitute name with (rename name name' scope)
-  Binding (Expression body) -> checkedExpression type' $ substitute name with <$> body
+  Binding (Expression body) -> checkedExpression typeChecker $ substitute name with <$> body
   Annotation a b -> let a' = substitute name with a
                         b' = substitute name with b in checkedTyping (check b' a') (Annotation a' b')
   Type _ -> term
