@@ -74,6 +74,9 @@ spec = do
     prop "does not replace shadowed variables" $
       \ name -> substitute name _type' (abstraction name (variable name)) `shouldBe` (abstraction name (variable name) :: Term Expression)
 
+    prop "transits expressions" $
+      \ name -> substitute name _type' (apply (variable name) (variable name)) `shouldBe` (apply _type' _type' :: Term Expression)
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
