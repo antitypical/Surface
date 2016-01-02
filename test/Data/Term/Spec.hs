@@ -66,7 +66,7 @@ spec = do
       \ name -> inferBinding name _type' (variable name) `shouldBe` Right _type'
 
     it "infers the types of constant lambdas" $
-      infer (_type' `lambda` const _type') `shouldBe` Right (_type' --> _type')
+      infer (_type' `lambda` const _type') `shouldBe` Right (_type' --> _type 1)
 
     it "infers the type of `identity`" $
       infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
