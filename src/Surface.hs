@@ -32,6 +32,8 @@ lambda t f = checkedExpression typeChecker $ Lambda t body
           return $ t `pi` (`applySubstitution` body')
 
 
+infixr `pi`
+
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
 pi t f = checkedExpression typeChecker $ Lambda t body
