@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable, StandaloneDeriving, UndecidableInstances, FlexibleInstances #-}
 module Data.Term where
 
 import Data.Binding
@@ -102,3 +102,10 @@ cata f = f . fmap (cata f) . out
 para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
+
+instance (Data.Typeable f, Data.Data (f (Term f))) => Data.Data (TypeChecker f) where
+  gunfold _ z _ = z (const $ Right implicit)
+  toConstr a = Data.mkConstr (Data.dataTypeOf a) "TypeChecker" [] Data.Prefix
+  dataTypeOf _ = Data.mkDataType "Data.Term.TypeChecker" []
+
+deriving instance (Data.Typeable f, Data.Data (f (Term f))) => Data.Data (Term f)
