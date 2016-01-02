@@ -38,7 +38,7 @@ pi t f = checkedExpression typeChecker $ Lambda t body
         name = maybe (Local 0) prime $ maxBoundVariable scope
         typeChecker context = do
           _ <- checkIsType t context
-          body' <- checkIsType body (Map.insert name t context)
+          body' <- checkIsType body (extendContext t context body)
           return $ t `pi` \ t' -> applySubstitution t' body'
 
 infixr -->
