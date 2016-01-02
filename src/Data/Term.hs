@@ -111,7 +111,7 @@ byUnifying a b context = do
 instance Eq (f (Term f)) => Eq (Term f) where
   a == b = freeVariables a == freeVariables b && out a == out b
 
-instance (Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
+instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
   unify expected actual = case (out expected, out actual) of
     (a, b) | a == b -> Just expected
     (_, Implicit) -> Just expected
@@ -121,5 +121,8 @@ instance (Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
       then do
         scope <- unify scope1 scope2
         return $ checkedAbstraction name1 (byUnifying (typeOf expected) (typeOf actual)) scope
-      else Nothing
+      else do
+        let name = pick $ freeVariables scope1 `mappend` freeVariables scope2 `mappend` Set.singleton name1 `mappend` Set.singleton name2
+        scope <- unify (rename name1 name scope1) (rename name2 name scope2)
+        return $ checkedAbstraction name (byUnifying (typeOf expected) (typeOf actual)) scope
     _ -> Nothing
