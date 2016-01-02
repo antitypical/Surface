@@ -22,6 +22,11 @@ variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free vari
 abstraction :: Name -> Term f -> Term f
 abstraction name scope = Term (Set.delete name $ freeVariables scope) (typeOf scope) (Binding (Abstraction name scope))
 
+abstract :: (Foldable f, Functor f) => (Term f -> Term f) -> Term f
+abstract f = abstraction name scope
+  where scope = f $ variable name
+        name = maybe (Local 0) prime $ maxBoundVariable scope
+
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
 annotation :: (Functor f, Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping (check type' term) $ Annotation term type'
