@@ -58,7 +58,7 @@ apply a b = checkedExpression type' $ Application a b
           return $ applySubstitution type' body
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
-annotation :: (Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
+annotation :: (Functor f, Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 
 
