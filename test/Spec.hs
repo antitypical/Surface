@@ -1,21 +1,41 @@
 import Surface
 import qualified Data.Name.Internal.Spec
 import qualified Data.Term.Spec
+import qualified Data.Either as Either
+import Test.Assertions
 import Test.Hspec
-import Test.Hspec.QuickCheck
-import qualified Data.Set as Set
 
 main :: IO ()
-main = hspec $ do
+main = hspec . parallel $ do
   describe "Data.Name.Internal" Data.Name.Internal.Spec.spec
   describe "Data.Term" Data.Term.Spec.spec
 
   describe "lambda" $ do
     it "produces binding abstractions" $
-      lambda (typing $ Type 0) id `shouldBe` Term mempty (Right implicit) (Binding $ Expression $ Lambda (Term mempty (Right implicit) $ Type 0) (Term mempty (Right implicit) $ Binding $ Abstraction (Local 0) $ Term (Set.singleton (Local 0)) (Right implicit) (Binding $ Variable $ Local 0)))
+      lambda _type' id `shouldBe` Term mempty (const $ Right implicit) (Binding $ Expression $ Lambda _type' (abstraction (Local 0) $ variable (Local 0)))
 
-identity :: Term Expression
-identity = lambda _type' $ \ t -> lambda t id
+    it "picks fresh names" $
+      (_type' `lambda` const (_type' `lambda` const _type')) `shouldBe` Term mempty (const $ Right implicit) (Binding $ Expression $ Lambda _type' $ abstraction (Local 1) $ Term mempty (const $ Right implicit) $ Binding $ Expression $ Lambda _type' $ abstraction (Local 0) _type')
 
-constant :: Term Expression
-constant = lambda _type' $ \ a -> lambda _type' $ \ b -> lambda a $ \ a' -> lambda b $ const a'
+    it "rejects non-Type types" $
+      typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> lambda a' $ const _type') mempty `shouldSatisfy` Either.isLeft
+
+  describe "apply" $ do
+    it "rejects non-function operators" $
+      typeOf (apply _type' _type') mempty `shouldSatisfy` Either.isLeft
+
+    it "typechecks as its operator’s return type" $
+      typeOf (apply (_type' `lambda` \ t -> t `lambda` id) _type') mempty `shouldResult` _type 0 --> _type 0
+
+  describe "-->" $ do
+    it "rejects non-Type parameter types" $
+      typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a' --> a) mempty `shouldSatisfy` Either.isLeft
+
+    it "rejects non-Type return types" $
+      typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a --> a') mempty `shouldSatisfy` Either.isLeft
+
+    it "associates to the right" $
+      _type' --> _type' --> _type' `shouldBe` _type' --> (_type' --> _type')
+
+    it "is not associative" $
+      (_type' --> _type') --> _type' `shouldNotBe` _type' --> (_type' --> _type')
