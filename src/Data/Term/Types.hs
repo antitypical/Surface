@@ -14,3 +14,5 @@ type TypeChecker term = Context term -> Result term
 
 data Term' term f = Term' (Set.Set Name) (TypeChecker term) (Typing (Binding f) term)
 newtype Term f = Term (Term' (Term f) f)
+
+data Unification f = Unification (Term' (Unification f) f) | Replace (Term f) (Term f)
