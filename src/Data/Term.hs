@@ -61,7 +61,7 @@ implicit = Term mempty (const $ Right implicit) Implicit
 check :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> TypeChecker f
 check expected term context = do
   actual <- typeOf term context
-  maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'") Right $ unify expected actual
+  expectUnifiable expected actual
 
 expectUnifiable :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> Result (Term f)
 expectUnifiable expected actual = maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'") Right $ unify expected actual
