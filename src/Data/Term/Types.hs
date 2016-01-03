@@ -19,3 +19,7 @@ data Unification f = Unification (Typing (Binding f) (Unification f)) | Replace 
 expected :: Functor f => Unification f -> Term f
 expected (Replace expected _) = expected
 expected (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (expected <$> out)
+
+actual :: Functor f => Unification f -> Term f
+actual (Replace _ actual) = actual
+actual (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (actual <$> out)
