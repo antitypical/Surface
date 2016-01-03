@@ -19,7 +19,7 @@ import Data.Unification as Surface'
 import Control.Applicative
 import qualified Data.Set as Set
 
-infixr `lambda`
+infixr 5 `lambda`
 
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
@@ -32,7 +32,7 @@ lambda t f = checkedExpression typeChecker $ Lambda t body
             Just name -> t `pi` \ v -> substitute name v bodyType
             _ -> t --> bodyType
 
-infixr `pi`
+infixr 5 `pi`
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
@@ -45,7 +45,7 @@ pi t f = checkedExpression typeChecker $ Lambda t body
             Just name -> t `pi` \ v -> substitute name v bodyType
             _ -> t --> bodyType
 
-infixr -->
+infixr 5 -->
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
