@@ -132,6 +132,11 @@ spec = do
     prop "transits annotations" $
       \ name -> rename name (prime name) (annotation (variable name) (variable name)) `shouldBe` (annotation (variable $ prime name) (variable $ prime name) :: Term Expression)
 
+  describe "unify" $ do
+    prop "should unify _ with anything at left" $
+      \ term -> unify implicit term `shouldBe` Just (term :: Term Expression)
+
+
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
 
