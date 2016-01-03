@@ -9,15 +9,6 @@ import Data.Unification
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
-freeVariables :: Term f -> Set.Set Name
-freeVariables (Term (Term' freeVariables _ _)) = freeVariables
-
-typeOf :: Term f -> TypeChecker (Term f)
-typeOf (Term (Term' _ typeOf _)) = typeOf
-
-out :: Term f -> Typing (Binding f) (Term f)
-out (Term (Term' _ _ out)) = out
-
 variable :: Name -> Term f
 variable name = Term $ Term' (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
