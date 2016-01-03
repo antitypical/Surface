@@ -12,6 +12,8 @@ before_install:
 - chmod a+x ~/.local/bin/stack
 - stack --no-terminal setup
 
+# We need to override the default `install` script, as Travis will otherwise run
+# https://docs.travis-ci.com/user/languages/haskell/#Travis-CI-uses-cabal
 install:
 - stack build --no-terminal --only-snapshot
 
