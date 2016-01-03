@@ -25,7 +25,7 @@ main = hspec $ do
       typeOf (apply _type' _type') mempty `shouldSatisfy` Either.isLeft
 
     it "typechecks as its operator’s return type" $
-      typeOf (apply (_type' `lambda` \ t -> t `lambda` id) _type') mempty `shouldBe` Right (_type 1 --> _type 1)
+      typeOf (apply (_type' `lambda` \ t -> t `lambda` id) _type') mempty `shouldResult` (_type 1 --> _type 1)
 
   describe "-->" $ do
     it "rejects non-Type parameter types" $
