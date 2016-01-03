@@ -145,6 +145,9 @@ spec = do
     prop "equal variables unify" $
       \ name -> unify (variable name) (variable name) `shouldBe` Just (variable name :: Term Expression)
 
+    prop "abstractions over the same name unify" $
+      \ name term -> unify (abstraction name implicit) (abstraction name term) `shouldBe` Just (abstraction name term :: Term Expression)
+
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
