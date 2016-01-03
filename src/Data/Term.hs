@@ -4,18 +4,10 @@ module Data.Term where
 import Data.Binding
 import Data.Name
 import Data.Typing
+import Data.Term.Types
 import Data.Unification
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-
-type Result a = Either String a
-
-type Context term = Map.Map Name term
-
-type TypeChecker term = Context term -> Result term
-
-data Term' term f = Term' (Set.Set Name) (TypeChecker term) (Typing (Binding f) term)
-newtype Term f = Term (Term' (Term f) f)
 
 freeVariables :: Term f -> Set.Set Name
 freeVariables (Term (Term' freeVariables _ _)) = freeVariables
