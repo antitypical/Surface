@@ -142,6 +142,9 @@ spec = do
     prop "binding & non-binding functions unify" $
       \ n -> unify (_type n --> _type n) (_type n `pi` const (_type n)) `shouldBe` Just (_type n --> _type n :: Term Expression)
 
+    prop "equal variables unify" $
+      \ name -> unify (variable name) (variable name) `shouldBe` Just (variable name :: Term Expression)
+
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
