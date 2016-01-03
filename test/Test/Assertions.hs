@@ -1,4 +1,6 @@
-module Test.Assertions where
+module Test.Assertions (
+  shouldResult,
+) where
 
 import Surface
 import Test.Hspec
