@@ -26,7 +26,6 @@ lambda t f = checkedExpression typeChecker $ Lambda t body
   where body = abstract f
         typeChecker context = do
           _ <- checkIsType t context
-
           bodyType <- typeOf body (extendContext t context body)
           return $ case shadowing body bodyType of
             Just name -> t `pi` \ v -> substitute name v bodyType
