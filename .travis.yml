@@ -20,3 +20,6 @@ install:
 # http://docs.haskellstack.org/en/stable/travis_ci.html#running-tests
 script:
 - stack build --no-terminal --test
+
+notifications:
+  email: false
