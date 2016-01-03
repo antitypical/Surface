@@ -136,6 +136,9 @@ spec = do
     prop "should unify _ with anything at left" $
       \ term -> unify implicit term `shouldBe` Just (term :: Term Expression)
 
+    prop "should unify _ with anything at right" $
+      \ term -> unify term implicit `shouldBe` Just (term :: Term Expression)
+
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
