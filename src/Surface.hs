@@ -14,6 +14,7 @@ import Data.Expression as Surface'
 import Data.Name as Surface'
 import Data.Name.Internal
 import Data.Term as Surface'
+import Data.Term.Types as Surface'
 import Data.Typing as Surface'
 import Data.Unification as Surface'
 import Control.Applicative
