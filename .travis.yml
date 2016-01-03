@@ -12,9 +12,5 @@ before_install:
 - chmod a+x ~/.local/bin/stack
 - stack --no-terminal setup
 
-install:
-  - stack setup --no-terminal
-  - stack build --only-snapshot --no-terminal
-
 script:
   - stack build --no-terminal :Surface-test
