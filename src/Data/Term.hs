@@ -63,9 +63,6 @@ check expected term context = do
   actual <- typeOf term context
   maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'") Right $ unify expected actual
 
-checkIsType :: (Show (Term f), Unifiable (Term f), Foldable f) => Term f -> TypeChecker f
-checkIsType = check _type'
-
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
   Annotation a b -> max a b

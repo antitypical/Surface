@@ -70,6 +70,9 @@ checkHasFunctionType term context = do
     Binding (Expression (Lambda type' body)) -> return (type', body)
     _ -> Left "expected function type"
 
+checkIsType :: (Show (Term f), Unifiable (Term f), Foldable f) => Term f -> TypeChecker f
+checkIsType = check _type'
+
 
 instance Show (Term Expression) where
   show = fst . para (\ b -> case b of
