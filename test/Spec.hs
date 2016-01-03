@@ -23,7 +23,7 @@ main = hspec $ do
     it "rejects non-function operators" $
       typeOf (apply _type' _type') mempty `shouldSatisfy` Either.isLeft
 
-    it "typechecks to its operator’s return type" $
+    it "typechecks as its operator’s return type" $
       typeOf (apply (_type' `lambda` \ t -> t `lambda` id) _type') mempty `shouldBe` Right (_type 1 --> _type 1)
 
   describe "-->" $ do
