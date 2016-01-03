@@ -69,7 +69,7 @@ checkHasFunctionType term context = do
   type' <- checkIsType term context
   case out type' of
     Binding (Expression (Lambda type' body)) -> return (type', body)
-    _ -> fail "expected function type"
+    _ -> Left "expected function type"
 
 
 instance Show (Term Expression) where
