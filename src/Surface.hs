@@ -66,8 +66,10 @@ apply a b = checkedExpression type' $ Application a b
 
 checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
 checkHasFunctionType term context = do
-  (Binding (Expression (Lambda type' body))) <- out <$> checkIsType term context
-  return (type', body)
+  type' <- checkIsType term context
+  case out type' of
+    Binding (Expression (Lambda type' body)) -> return (type', body)
+    _ -> fail "expected function type"
 
 
 instance Show (Term Expression) where
