@@ -14,4 +14,4 @@ before_install:
 - stack build --no-terminal --only-snapshot
 
 script:
-- stack build --no-terminal :Surface-test
+- stack build --no-terminal --test
