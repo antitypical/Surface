@@ -7,7 +7,7 @@ cache:
 
 before_install:
 - mkdir -p ~/.local/bin
-- export PATH=~/.local/bin:$PATH
+- export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v1.0.0/stack-1.0.0-linux-x86_64.tar.gz | gunzip > ~/.local/bin/stack
 - chmod a+x ~/.local/bin/stack
 
