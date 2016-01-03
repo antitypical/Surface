@@ -139,6 +139,9 @@ spec = do
     prop "_ is right unit" $
       \ term -> unify term implicit `shouldBe` Just (term :: Term Expression)
 
+    prop "binding & non-binding functions unify" $
+      \ n -> unify (_type n --> _type n) (_type n `pi` const (_type n)) `shouldBe` Just (_type n --> _type n :: Term Expression)
+
 
 infer :: Term Expression -> Either String (Term Expression)
 infer term = typeOf term mempty
