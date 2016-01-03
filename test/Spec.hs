@@ -19,6 +19,10 @@ main = hspec $ do
     it "rejects non-Type types" $
       typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> lambda a' $ const _type') mempty `shouldSatisfy` Either.isLeft
 
+  describe "apply" $
+    it "rejects non-function operators" $
+      typeOf (apply _type' _type') mempty `shouldSatisfy` Either.isLeft
+
   describe "-->" $ do
     it "rejects non-Type parameter types" $
       typeOf (lambda _type' $ \ a -> lambda a $ \ a' -> a' --> a) mempty `shouldSatisfy` Either.isLeft
