@@ -12,7 +12,7 @@ type Context term = Map.Map Name term
 
 type TypeChecker term = Context term -> Result term
 
-data Term' term f = Term' (Set.Set Name) (TypeChecker term) (Typing (Binding f) term)
+data Term' term f = Term' { freeVariables' :: Set.Set Name, typeOf' :: TypeChecker term, out' :: Typing (Binding f) term }
 newtype Term f = Term (Term' (Term f) f)
 
 freeVariables :: Term f -> Set.Set Name
