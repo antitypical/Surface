@@ -133,10 +133,10 @@ spec = do
       \ name -> rename name (prime name) (annotation (variable name) (variable name)) `shouldBe` (annotation (variable $ prime name) (variable $ prime name) :: Term Expression)
 
   describe "unify" $ do
-    prop "should unify _ with anything at left" $
+    prop "_ is left unit" $
       \ term -> unify implicit term `shouldBe` Just (term :: Term Expression)
 
-    prop "should unify _ with anything at right" $
+    prop "_ is right unit" $
       \ term -> unify term implicit `shouldBe` Just (term :: Term Expression)
 
 
