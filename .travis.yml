@@ -1,0 +1,22 @@
+language: haskell
+
+sudo: false
+cache:
+  directories:
+  - $HOME/.stack/
+
+before_install:
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- chmod a+x ~/.local/bin/stack
+- stack --no-terminal setup
+
+# We need to override the default `install` script, as Travis will otherwise run cabal.
+# https://docs.travis-ci.com/user/languages/haskell/#Travis-CI-uses-cabal
+install:
+- stack build --no-terminal --only-snapshot
+
+# http://docs.haskellstack.org/en/stable/travis_ci.html#running-tests
+script:
+- stack build --no-terminal --test
