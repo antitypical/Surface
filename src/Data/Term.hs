@@ -14,23 +14,23 @@ type Context term = Map.Map Name term
 
 type TypeChecker term = Context term -> Result term
 
-data Fix' term f = Fix' (Set.Set Name) (TypeChecker term) (Typing (Binding f) term)
-newtype Term f = Term (Fix' (Term f) f)
+data Term' term f = Term' (Set.Set Name) (TypeChecker term) (Typing (Binding f) term)
+newtype Term f = Term (Term' (Term f) f)
 
 freeVariables :: Term f -> Set.Set Name
-freeVariables (Term (Fix' freeVariables _ _)) = freeVariables
+freeVariables (Term (Term' freeVariables _ _)) = freeVariables
 
 typeOf :: Term f -> TypeChecker (Term f)
-typeOf (Term (Fix' _ typeOf _)) = typeOf
+typeOf (Term (Term' _ typeOf _)) = typeOf
 
 out :: Term f -> Typing (Binding f) (Term f)
-out (Term (Fix' _ _ out)) = out
+out (Term (Term' _ _ out)) = out
 
 variable :: Name -> Term f
-variable name = Term $ Fix' (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
+variable name = Term $ Term' (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
 abstraction :: Name -> Term f -> Term f
-abstraction name scope = Term $ Fix' (Set.delete name $ freeVariables scope) (typeOf scope) (Binding (Abstraction name scope))
+abstraction name scope = Term $ Term' (Set.delete name $ freeVariables scope) (typeOf scope) (Binding (Abstraction name scope))
 
 abstract :: (Foldable f, Functor f) => (Term f -> Term f) -> Term f
 abstract f = abstraction name scope
@@ -43,14 +43,14 @@ annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 
 
 checkedAbstraction :: Name -> TypeChecker (Term f) -> Term f -> Term f
-checkedAbstraction name typeChecker scope = Term $ Fix' (Set.delete name $ freeVariables scope) typeChecker (Binding (Abstraction name scope))
+checkedAbstraction name typeChecker scope = Term $ Term' (Set.delete name $ freeVariables scope) typeChecker (Binding (Abstraction name scope))
 
 -- | Constructs an abstraction term with a name, the type of that name, and the scope which the name is available within.
 typedAbstraction :: Name -> Term f -> Term f -> Term f
 typedAbstraction name type' scope = checkedAbstraction name (typeOf scope . Map.insert name type') scope
 
 checkedTyping :: Foldable f => TypeChecker (Term f) -> Typing (Binding f) (Term f) -> Term f
-checkedTyping typeChecker t = Term $ Fix' (foldMap freeVariables t) typeChecker t
+checkedTyping typeChecker t = Term $ Term' (foldMap freeVariables t) typeChecker t
 
 checkedBinding :: Foldable f => TypeChecker (Term f) -> Binding f (Term f) -> Term f
 checkedBinding typeChecker = checkedTyping typeChecker . Binding
@@ -59,13 +59,13 @@ checkedExpression :: Foldable f => TypeChecker (Term f) -> f (Term f) -> Term f
 checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
 _type :: Foldable f => Int -> Term f
-_type n = Term $ Fix' mempty (const . Right . _type $ n + 1) $ Type n
+_type n = Term $ Term' mempty (const . Right . _type $ n + 1) $ Type n
 
 _type' :: Foldable f => Term f
 _type' = _type 0
 
 implicit :: Term f
-implicit = Term $ Fix' mempty (const $ Right implicit) Implicit
+implicit = Term $ Term' mempty (const $ Right implicit) Implicit
 
 -- | Constructs a typechecker which verifies that the given type is inhabited by the given term.
 check :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> TypeChecker (Term f)
@@ -85,7 +85,7 @@ maxBoundVariable = cata $ \ t -> case t of
 
 rename :: (Foldable f, Functor f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Name -> Term f -> Term f
 rename old new term | old == new = term
-rename old new term@(Term (Fix' _ typeChecker binding)) = case binding of
+rename old new term@(Term (Term' _ typeChecker binding)) = case binding of
   Binding (Variable name) -> if name == old then variable new else term
   Binding (Abstraction name scope) -> if name == old then term else checkedAbstraction name typeChecker (rename old new scope)
   Binding (Expression body) -> checkedExpression typeChecker $ rename old new <$> body
@@ -96,7 +96,7 @@ rename old new term@(Term (Fix' _ typeChecker binding)) = case binding of
 
 substitute :: (Foldable f, Functor f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
 substitute name with term | with == variable name = term
-substitute name with term@(Term (Fix' _ typeChecker binding)) = case binding of
+substitute name with term@(Term (Term' _ typeChecker binding)) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
   Binding (Abstraction bound scope) -> if name == bound then term else abstraction bound' scope'
     where bound' = fresh (Set.union (freeVariables term) (freeVariables with)) bound
@@ -113,7 +113,7 @@ applySubstitution withTerm body = case out body of
   _ -> body
 
 extendContext :: Term f -> Context (Term f) -> Term f -> Context (Term f)
-extendContext type' context (Term (Fix' _ _ binding)) = case binding of
+extendContext type' context (Term (Term' _ _ binding)) = case binding of
   Binding (Abstraction name _) -> Map.insert name type' context
   _ -> context
 
