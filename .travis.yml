@@ -13,4 +13,4 @@ before_install:
 - stack --no-terminal setup
 
 script:
-  - stack build --no-terminal :Surface-test
+- stack build --no-terminal :Surface-test
