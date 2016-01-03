@@ -12,9 +12,9 @@ type Result a = Either String a
 
 type Context term = Map.Map Name term
 
-type TypeChecker f = Context (Term f) -> Result (Term f)
+type TypeChecker term = Context term -> Result term
 
-data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker f, out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term f), out :: Typing (Binding f) (Term f) }
 
 variable :: Name -> Term f
 variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
@@ -32,20 +32,20 @@ annotation :: (Functor f, Foldable f, Show (Term f), Unifiable (f (Term f)), Eq 
 annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 
 
-checkedAbstraction :: Name -> TypeChecker f -> Term f -> Term f
+checkedAbstraction :: Name -> TypeChecker (Term f) -> Term f -> Term f
 checkedAbstraction name typeChecker scope = Term (Set.delete name $ freeVariables scope) typeChecker (Binding (Abstraction name scope))
 
 -- | Constructs an abstraction term with a name, the type of that name, and the scope which the name is available within.
 typedAbstraction :: Name -> Term f -> Term f -> Term f
 typedAbstraction name type' scope = checkedAbstraction name (typeOf scope . Map.insert name type') scope
 
-checkedTyping :: Foldable f => TypeChecker f -> Typing (Binding f) (Term f) -> Term f
+checkedTyping :: Foldable f => TypeChecker (Term f) -> Typing (Binding f) (Term f) -> Term f
 checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
 
-checkedBinding :: Foldable f => TypeChecker f -> Binding f (Term f) -> Term f
+checkedBinding :: Foldable f => TypeChecker (Term f) -> Binding f (Term f) -> Term f
 checkedBinding typeChecker = checkedTyping typeChecker . Binding
 
-checkedExpression :: Foldable f => TypeChecker f -> f (Term f) -> Term f
+checkedExpression :: Foldable f => TypeChecker (Term f) -> f (Term f) -> Term f
 checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
 _type :: Foldable f => Int -> Term f
@@ -58,7 +58,7 @@ implicit :: Term f
 implicit = Term mempty (const $ Right implicit) Implicit
 
 -- | Constructs a typechecker which verifies that the given type is inhabited by the given term.
-check :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> TypeChecker f
+check :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> TypeChecker (Term f)
 check expected term context = do
   actual <- typeOf term context
   expectUnifiable expected actual
@@ -121,7 +121,7 @@ para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
 
-byUnifying :: (Unifiable (Term f)) => TypeChecker f -> TypeChecker f -> TypeChecker f
+byUnifying :: (Unifiable (Term f)) => TypeChecker (Term f) -> TypeChecker (Term f) -> TypeChecker (Term f)
 byUnifying a b context = do
   a' <- a context
   b' <- b context

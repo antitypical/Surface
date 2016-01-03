@@ -78,7 +78,7 @@ instance Monoid a => Alternative (Either a) where
   Right a <|> _ = Right a
   _ <|> Right b = Right b
 
-checkIsType :: (Show (Term Expression), Unifiable (Term Expression), Foldable Expression) => Term Expression -> TypeChecker Expression
+checkIsType :: (Show (Term Expression), Unifiable (Term Expression), Foldable Expression) => Term Expression -> TypeChecker (Term Expression)
 checkIsType term context = do
   actual <- typeOf term context
   expectUnifiable _type' actual <|> expectUnifiable (_type' --> _type') actual
