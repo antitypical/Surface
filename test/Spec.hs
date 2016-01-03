@@ -3,6 +3,7 @@ import qualified Data.Name.Internal.Spec
 import qualified Data.Term.Spec
 import qualified Data.Either as Either
 import Test.Hspec
+import Test.HUnit.Base
 
 main :: IO ()
 main = hspec $ do
@@ -38,3 +39,6 @@ main = hspec $ do
 
     it "is not associative" $
       (_type' --> _type') --> _type' `shouldNotBe` _type' --> (_type' --> _type')
+
+shouldResult :: (Show a, Eq a) => Result a -> a -> Expectation
+action `shouldResult` expected = either assertFailure (`shouldBe` expected) action
