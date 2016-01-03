@@ -16,3 +16,6 @@ data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term 
 
 data Unification f = Unification (Typing (Binding f) (Unification f)) | Replace (Term f) (Term f)
 
+expected :: Functor f => Unification f -> Term f
+expected (Replace expected _) = expected
+expected (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (expected <$> out)
