@@ -69,7 +69,7 @@ spec = do
 
   describe "typeOf" $ do
     prop "infers the type of Type" $
-      \ n -> infer (_type n) `shouldResult` _type $ n + 1
+      \ n -> infer (_type n) `shouldResult` _type (n + 1)
 
     it "infers the type of functions over types" $
       infer (_type' --> _type') `shouldResult` _type' --> _type'
