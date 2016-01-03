@@ -10,9 +10,9 @@ import qualified Data.Set as Set
 
 type Result a = Either String a
 
-type Context f = Map.Map Name (Term f)
+type Context term = Map.Map Name term
 
-type TypeChecker f = Context f -> Result (Term f)
+type TypeChecker f = Context (Term f) -> Result (Term f)
 
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker f, out :: Typing (Binding f) (Term f) }
 
@@ -102,7 +102,7 @@ applySubstitution withTerm body = case out body of
   Binding (Abstraction name inScope) -> substitute name withTerm inScope
   _ -> body
 
-extendContext :: Term f -> Context f -> Term f -> Context f
+extendContext :: Term f -> Context (Term f) -> Term f -> Context (Term f)
 extendContext type' context (Term _ _ binding) = case binding of
   Binding (Abstraction name _) -> Map.insert name type' context
   _ -> context

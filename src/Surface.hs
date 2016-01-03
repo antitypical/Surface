@@ -64,7 +64,7 @@ apply a b = checkedExpression type' $ Application a b
           return $ applySubstitution type' body
 
 
-checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
+checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
 checkHasFunctionType term context = do
   type' <- typeOf term context
   case out type' of
