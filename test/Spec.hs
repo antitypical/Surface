@@ -6,7 +6,7 @@ import Test.Assertions
 import Test.Hspec
 
 main :: IO ()
-main = hspec $ do
+main = hspec . parallel $ do
   describe "Data.Name.Internal" Data.Name.Internal.Spec.spec
   describe "Data.Term" Data.Term.Spec.spec
 
