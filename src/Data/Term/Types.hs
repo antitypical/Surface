@@ -12,17 +12,7 @@ type Context term = Map.Map Name term
 
 type TypeChecker term = Context term -> Result term
 
-data Term' term f = Term' { freeVariables' :: Set.Set Name, typeOf' :: TypeChecker term, out' :: Typing (Binding f) term }
-newtype Term f = Term (Term' (Term f) f)
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term f), out :: Typing (Binding f) (Term f) }
 
-freeVariables :: Term f -> Set.Set Name
-freeVariables (Term (Term' freeVariables _ _)) = freeVariables
+data Unification f = Unification (Typing (Binding f) (Unification f)) | Replace (Term f) (Term f)
 
-typeOf :: Term f -> TypeChecker (Term f)
-typeOf (Term (Term' _ typeOf _)) = typeOf
-
-out :: Term f -> Typing (Binding f) (Term f)
-out (Term (Term' _ _ out)) = out
-
-
-data Unification f = Unification (Term' (Unification f) f) | Replace (Term f) (Term f)
