@@ -16,6 +16,7 @@ import Data.Name.Internal
 import Data.Term as Surface'
 import Data.Typing as Surface'
 import Data.Unification as Surface'
+import Control.Applicative
 import qualified Data.Set as Set
 
 infixr `lambda`
@@ -69,6 +70,13 @@ checkHasFunctionType term context = do
   case out type' of
     Binding (Expression (Lambda type' body)) -> return (type', body)
     _ -> Left "expected function type"
+
+
+instance Monoid a => Alternative (Either a) where
+  empty = Left mempty
+  Left a <|> Left b = Left $ a `mappend` b
+  Right a <|> _ = Right a
+  _ <|> Right b = Right b
 
 checkIsType :: (Show (Term Expression), Unifiable (Term Expression), Foldable Expression) => Term Expression -> TypeChecker Expression
 checkIsType term context = do
