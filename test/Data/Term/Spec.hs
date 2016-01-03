@@ -13,6 +13,13 @@ instance Arbitrary Name where
       Global <$> arbitrary
     ]
 
+instance Arbitrary f => Arbitrary (Expression f) where
+  arbitrary = oneof [
+      Application <$> recur <*> recur,
+      Lambda <$> recur <*> recur
+    ]
+    where recur = scale (`div` 2) arbitrary
+
 spec :: Spec
 spec = do
   describe "show" $ do
