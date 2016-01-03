@@ -71,7 +71,9 @@ checkHasFunctionType term context = do
     _ -> Left "expected function type"
 
 checkIsType :: (Show (Term Expression), Unifiable (Term Expression), Foldable Expression) => Term Expression -> TypeChecker Expression
-checkIsType = check _type'
+checkIsType term context = do
+  actual <- typeOf term context
+  expectUnifiable _type' actual
 
 
 instance Show (Term Expression) where
