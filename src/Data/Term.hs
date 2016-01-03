@@ -28,7 +28,7 @@ abstract f = abstraction name scope
         name = maybe (Local 0) prime $ maxBoundVariable (f $ variable (Local $ negate 1))
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
-annotation :: (Functor f, Foldable f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
+annotation :: (Functor f, Foldable f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping (check type' term) $ Annotation term type'
 
 
@@ -58,12 +58,12 @@ implicit :: Term f
 implicit = Term mempty (const $ Right implicit) Implicit
 
 -- | Constructs a typechecker which verifies that the given type is inhabited by the given term.
-check :: Unifiable (Term f) => Term f -> Term f -> TypeChecker f
+check :: (Show (Term f), Unifiable (Term f)) => Term f -> Term f -> TypeChecker f
 check expected term context = do
   actual <- typeOf term context
   maybe (Left "couldn't unify") Right $ unify expected actual
 
-checkIsType :: (Unifiable (Term f), Foldable f) => Term f -> TypeChecker f
+checkIsType :: (Show (Term f), Unifiable (Term f), Foldable f) => Term f -> TypeChecker f
 checkIsType term context = either (Left . ("expected Type. " ++)) Right $ check _type' term context
 
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
@@ -73,7 +73,7 @@ maxBoundVariable = cata $ \ t -> case t of
   Binding (Expression e) -> maximum e
   _ -> Nothing
 
-rename :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Name -> Term f -> Term f
+rename :: (Foldable f, Functor f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Name -> Term f -> Term f
 rename old new term | old == new = term
 rename old new term@(Term _ typeChecker binding) = case binding of
   Binding (Variable name) -> if name == old then variable new else term
@@ -84,7 +84,7 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-substitute :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
+substitute :: (Foldable f, Functor f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
 substitute name with term | with == variable name = term
 substitute name with term@(Term _ typeChecker binding) = case binding of
   Binding (Variable v) -> if name == v then with else variable v
@@ -97,7 +97,7 @@ substitute name with term@(Term _ typeChecker binding) = case binding of
   Type _ -> term
   Implicit -> term
 
-applySubstitution :: (Foldable f, Functor f, Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
+applySubstitution :: (Foldable f, Functor f, Show (Term f), Unifiable (f (Term f)), Eq (f (Term f))) => Term f -> Term f -> Term f
 applySubstitution withTerm body = case out body of
   Binding (Abstraction name inScope) -> substitute name withTerm inScope
   _ -> body
@@ -130,7 +130,7 @@ byUnifying a b context = do
 instance Eq (f (Term f)) => Eq (Term f) where
   a == b = freeVariables a == freeVariables b && out a == out b
 
-instance (Functor f, Foldable f, Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
+instance (Functor f, Foldable f, Show (Term f), Eq (f (Term f)), Unifiable (f (Term f))) => Unifiable (Term f) where
   unify expected actual = case (out expected, out actual) of
     (a, b) | a == b -> Just expected
 
