@@ -4,6 +4,7 @@ module Data.Term.Spec (spec) where
 import Prelude hiding (pi)
 import Surface
 import qualified Data.Map as Map
+import Test.Assertions
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
@@ -68,25 +69,25 @@ spec = do
 
   describe "typeOf" $ do
     prop "infers the type of Type" $
-      \ n -> infer (_type n) `shouldBe` Right (_type $ n + 1)
+      \ n -> infer (_type n) `shouldResult` _type $ n + 1
 
     it "infers the type of functions over types" $
-      infer (_type' --> _type') `shouldBe` Right (_type' --> _type')
+      infer (_type' --> _type') `shouldResult` _type' --> _type'
 
     it "infers the type of pi types" $
-      infer (_type' `pi` id) `shouldBe` Right (_type' --> _type')
+      infer (_type' `pi` id) `shouldResult` _type' --> _type'
 
     prop "infers the types of variables bound in the context" $
-      \ name -> inferBinding name _type' (variable name) `shouldBe` Right _type'
+      \ name -> inferBinding name _type' (variable name) `shouldResult` _type'
 
     it "infers the types of constant lambdas" $
-      infer (_type' `lambda` const _type') `shouldBe` Right (_type' --> _type 1)
+      infer (_type' `lambda` const _type') `shouldResult` _type' --> _type 1
 
     it "infers the type of `identity`" $
-      infer identity `shouldBe` Right (_type' `pi` (\ a -> a --> a))
+      infer identity `shouldResult` _type' `pi` (\ a -> a --> a)
 
     it "infers the type of `constant`" $
-      infer constant `shouldBe` Right (_type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a)))
+      infer constant `shouldResult` _type' `pi` (\ a -> _type' `pi` (\ b -> a --> b --> a))
 
   describe "substitute" $ do
     prop "is identity on Type" $
