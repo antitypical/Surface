@@ -23,3 +23,9 @@ expected (Unification out) = Term Set.empty (const $ Left "Unification does not 
 actual :: Functor f => Unification f -> Term f
 actual (Replace _ actual) = actual
 actual (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (actual <$> out)
+
+unified :: Traversable f => Unification f -> Maybe (Term f)
+unified (Replace _ _) = Nothing
+unified (Unification out) = do
+  out <- mapM unified out
+  return $ Term Set.empty (const $ Left "Unification does not preserve typecheckers") out
