@@ -64,7 +64,7 @@ check expected term context = do
   maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'") Right $ unify expected actual
 
 checkIsType :: (Show (Term f), Unifiable (Term f), Foldable f) => Term f -> TypeChecker f
-checkIsType term context = either (Left . ("expected Type. " ++)) Right $ check _type' term context
+checkIsType = check _type'
 
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
