@@ -21,10 +21,10 @@ instance Arbitrary f => Arbitrary (Expression f) where
     where recur = scale (`div` 2) arbitrary
 
 instance Arbitrary term => Arbitrary (Typing f term) where
-  arbitrary = oneof [
-      Type <$> arbitrary,
-      pure Implicit,
-      Annotation <$> scale (`div` 2) arbitrary <*> scale (`div` 2) arbitrary
+  arbitrary = frequency [
+      (16, Type <$> arbitrary),
+      (4, pure Implicit),
+      (1, Annotation <$> scale (`div` 2) arbitrary <*> scale (`div` 2) arbitrary)
     ]
 
 spec :: Spec
