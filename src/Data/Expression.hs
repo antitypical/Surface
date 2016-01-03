@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveFunctor, DeriveFoldable #-}
+{-# LANGUAGE DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 module Data.Expression where
 
 import Data.Unification
@@ -6,7 +6,7 @@ import Data.Unification
 data Expression recur
   = Application recur recur
   | Lambda recur recur
-  deriving (Functor, Show, Eq, Foldable)
+  deriving (Functor, Show, Eq, Foldable, Traversable)
 
 instance Unifiable recur => Unifiable (Expression recur) where
   unify expected actual = case (expected, actual) of
