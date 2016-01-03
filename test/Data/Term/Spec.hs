@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Data.Term.Spec (spec) where
 
 import Prelude hiding (pi)
@@ -13,19 +14,18 @@ instance Arbitrary Name where
       Global <$> arbitrary
     ]
 
-instance Arbitrary f => Arbitrary (Expression f) where
-  arbitrary = oneof [
-      Application <$> recur <*> recur,
-      Lambda <$> recur <*> recur
-    ]
-    where recur = scale (`div` 2) arbitrary
-
-instance Arbitrary term => Arbitrary (Typing f term) where
-  arbitrary = frequency [
-      (16, Type <$> arbitrary),
-      (4, pure Implicit),
-      (1, Annotation <$> scale (`div` 2) arbitrary <*> scale (`div` 2) arbitrary)
-    ]
+instance Arbitrary (Term Expression) where
+  arbitrary = arbitraryInScope []
+    where arbitraryInScope names = frequency $
+            (16, _type <$> arbitrary)
+            : (4, pure implicit)
+            : (1, annotation <$> recur names <*> recur names)
+            : (1, arbitrary >>= \ name -> abstraction name <$> recur (name : names))
+            : (1, expression <$> (Lambda <$> recur names <*> recur names))
+            : (1, expression <$> (Application <$> recur names <*> recur names))
+            : ((,) 4 . pure . variable <$> names)
+          recur names = scale (`div` 2) (arbitraryInScope names)
+          expression = checkedExpression (const (Right implicit))
 
 spec :: Spec
 spec = do
