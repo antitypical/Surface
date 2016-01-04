@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveFunctor, DeriveFoldable #-}
+{-# LANGUAGE DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 module Data.Typing where
 
 data Typing f term
@@ -6,4 +6,4 @@ data Typing f term
   | Annotation term term
   | Binding (f term)
   | Implicit
-  deriving (Show, Eq, Functor, Foldable)
+  deriving (Show, Eq, Functor, Foldable, Traversable)

@@ -21,6 +21,7 @@ library
                      , Data.Name
                      , Data.Name.Internal
                      , Data.Term
+                     , Data.Term.Types
                      , Data.Typing
                      , Data.Unification
                      , Surface

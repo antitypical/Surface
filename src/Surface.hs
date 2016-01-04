@@ -14,6 +14,7 @@ import Data.Expression as Surface'
 import Data.Name as Surface'
 import Data.Name.Internal
 import Data.Term as Surface'
+import Data.Term.Types as Surface'
 import Data.Typing as Surface'
 import Data.Unification as Surface'
 import Control.Applicative
@@ -64,7 +65,7 @@ apply a b = checkedExpression type' $ Application a b
           return $ applySubstitution type' body
 
 
-checkHasFunctionType :: Term Expression -> Context Expression -> Result (Term Expression, Term Expression)
+checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
 checkHasFunctionType term context = do
   type' <- typeOf term context
   case out type' of
@@ -78,7 +79,7 @@ instance Monoid a => Alternative (Either a) where
   Right a <|> _ = Right a
   _ <|> Right b = Right b
 
-checkIsType :: (Show (Term Expression), Unifiable (Term Expression), Foldable Expression) => Term Expression -> TypeChecker Expression
+checkIsType :: Term Expression -> TypeChecker (Term Expression)
 checkIsType term context = do
   actual <- typeOf term context
   expectUnifiable _type' actual <|> expectUnifiable (_type' --> _type') actual
@@ -94,7 +95,7 @@ instance Show (Term Expression) where
 
     Binding (Expression (Application (_, a) (_, b))) -> (wrap 4 (<=) a ++ " " ++ wrap 4 (<) b, 4)
 
-    Binding (Expression (Lambda (_, type') (Term _ _ (Binding (Abstraction name (Term free _ _))), body))) | Set.member name free -> ("λ " ++ show name ++ " : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
+    Binding (Expression (Lambda (_, type') (Term _ _ (Binding (Abstraction name term)), body))) | Set.member name (freeVariables term) -> ("λ " ++ show name ++ " : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
     Binding (Expression (Lambda (_, type') (Term _ _ (Binding (Abstraction _ _)), body))) -> ("λ _ : " ++ wrap 3 (<) type' ++ " . " ++ wrap 3 (<=) body, 3)
     Binding (Expression (Lambda (_, type') (_, body))) -> (wrap 3 (<) type' ++ " → " ++ wrap 3 (<=) body, 3)
 

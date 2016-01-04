@@ -135,22 +135,22 @@ spec = do
 
   describe "unify" $ do
     prop "_ is left unit" $
-      \ term -> unify implicit term `shouldBe` Just (term :: Term Expression)
+      \ term -> unify implicit term `shouldBe` into (term :: Term Expression)
 
     prop "_ is right unit" $
-      \ term -> unify term implicit `shouldBe` Just (term :: Term Expression)
+      \ term -> unify term implicit `shouldBe` into (term :: Term Expression)
 
     prop "identical terms unify" $
-      \ term -> unify term term `shouldBe` Just (term :: Term Expression)
+      \ term -> unify term term `shouldBe` into (term :: Term Expression)
 
     prop "binding & non-binding functions unify" $
-      \ n -> unify (_type n --> _type n) (_type n `pi` const (_type n)) `shouldBe` Just (_type n --> _type n :: Term Expression)
+      \ n -> unify (_type n --> _type n) (_type n `pi` const (_type n)) `shouldBe` into (_type n --> _type n :: Term Expression)
 
     prop "equal variables unify" $
-      \ name -> unify (variable name) (variable name) `shouldBe` Just (variable name :: Term Expression)
+      \ name -> unify (variable name) (variable name) `shouldBe` into (variable name :: Term Expression)
 
     prop "abstractions over the same name unify" $
-      \ name term -> unify (abstraction name implicit) (abstraction name term) `shouldBe` Just (abstraction name term :: Term Expression)
+      \ name term -> unify (abstraction name implicit) (abstraction name term) `shouldBe` into (abstraction name term :: Term Expression)
 
 
 infer :: Term Expression -> Either String (Term Expression)
