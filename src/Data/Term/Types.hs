@@ -11,7 +11,7 @@ type Result a = Either String a
 
 type Context term = Map.Map Name term
 
-type TypeChecker term = Context term -> Result term
+type TypeChecker term = Checker term
 
 type Inferer term = Context term -> Result term
 type Checker term = term -> Context term -> Result term
@@ -22,17 +22,17 @@ data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict
 
 expected :: Functor f => Unification f -> Term f
 expected (Conflict expected _) = expected
-expected (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (expected <$> out)
+expected (Unification out) = Term Set.empty (const . const $ Left "Unification does not preserve typecheckers") (expected <$> out)
 
 actual :: Functor f => Unification f -> Term f
 actual (Conflict _ actual) = actual
-actual (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (actual <$> out)
+actual (Unification out) = Term Set.empty (const . const $ Left "Unification does not preserve typecheckers") (actual <$> out)
 
 unified :: Traversable f => Unification f -> Maybe (Term f)
 unified (Conflict _ _) = Nothing
 unified (Unification out) = do
   out <- mapM unified out
-  return $ Term Set.empty (const $ Left "Unification does not preserve typecheckers") out
+  return $ Term Set.empty (const . const $ Left "Unification does not preserve typecheckers") out
 
 into :: Functor f => Term f -> Unification f
 into term = Unification $ into <$> out term
