@@ -84,6 +84,10 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Type _ -> term
   Implicit -> term
 
+renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
+renameUnification old new (Unification out) = Unification out
+renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
+
 substitute :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Term f -> Term f -> Term f
 substitute name with term | with == variable name = term
 substitute name with term@(Term _ typeChecker binding) = case binding of
