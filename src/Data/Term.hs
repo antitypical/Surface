@@ -82,6 +82,7 @@ renameUnification old new (Unification out) = Unification out
 renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
 
 renameTypingBy :: Functor f => (Name -> Name -> g f -> g f) -> Name -> Name -> Typing (Binding f) (g f) -> Typing (Binding f) (g f)
+renameTypingBy _ old new typing | old == new = typing
 renameTypingBy f old new typing = case typing of
   Binding (Variable name) -> if name == old then Binding (Variable new) else typing
   Binding (Abstraction name scope) -> if name == old then typing else Binding $ Abstraction name (f old new scope)
