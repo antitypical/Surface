@@ -13,6 +13,9 @@ type Context term = Map.Map Name term
 
 type TypeChecker term = Context term -> Result term
 
+type Inferer term = Context term -> Result term
+type Checker term = term -> Context term -> Result term
+
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term f), out :: Typing (Binding f) (Term f) }
 
 data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
