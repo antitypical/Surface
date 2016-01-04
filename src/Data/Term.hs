@@ -88,8 +88,7 @@ renameTypingBy f old new typing = case typing of
   Binding (Abstraction name scope) -> if name == old then typing else Binding $ Abstraction name (f scope)
   Binding (Expression body) -> Binding $ Expression $ f <$> body
 
-  Annotation a b -> let a' = f a
-                        b' = f b in Annotation a' b'
+  Annotation a b -> Annotation (f a) (f b)
 
   Type _ -> typing
   Implicit -> typing
