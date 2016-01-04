@@ -17,9 +17,6 @@ data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term 
 
 data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
 
-deriving instance (Eq (Term f), Eq (f (Unification f))) => Eq (Unification f)
-deriving instance (Show (Term f), Show (f (Unification f))) => Show (Unification f)
-
 expected :: Functor f => Unification f -> Term f
 expected (Conflict expected _) = expected
 expected (Unification out) = Term Set.empty (const $ Left "Unification does not preserve typecheckers") (expected <$> out)
@@ -40,3 +37,6 @@ into term = Unification $ into <$> out term
 
 instance Eq (f (Term f)) => Eq (Term f) where
   a == b = freeVariables a == freeVariables b && out a == out b
+
+deriving instance (Eq (Term f), Eq (f (Unification f))) => Eq (Unification f)
+deriving instance (Show (Term f), Show (f (Unification f))) => Show (Unification f)
