@@ -9,13 +9,6 @@ import Data.Unification
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
-instance (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Renameable (Term f) where
-  rename' = rename
-
-instance (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Renameable (Unification f) where
-  rename' old new (Unification out) = Unification out
-  rename' old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
-
 variable :: Name -> Term f
 variable name = Term (Set.singleton name) (maybe (Left $ "Unexpectedly free variable " ++ show name) Right . Map.lookup name) (Binding (Variable name))
 
