@@ -78,7 +78,7 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Implicit -> term
 
 renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
-renameUnification old new (Unification out) = Unification out
+renameUnification old new (Unification out) = Unification $ renameTypingBy renameUnification old new out
 renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
 
 renameTypingBy :: Functor f => (Name -> Name -> g f -> g f) -> Name -> Name -> Typing (Binding f) (g f) -> Typing (Binding f) (g f)
