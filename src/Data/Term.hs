@@ -62,8 +62,8 @@ expectUnifiable expected actual = maybe (Left $ "error: Unification failed.\nExp
 inferSpecific :: Term f -> Inferer (Term f)
 inferSpecific = const . Right
 
-byChecking :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
-byChecking inferer expected context = do
+checkInferred :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
+checkInferred inferer expected context = do
   actual <- inferer context
   actual `expectUnifiable` expected
 
