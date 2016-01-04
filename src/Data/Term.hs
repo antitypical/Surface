@@ -67,15 +67,8 @@ maxBoundVariable = cata $ \ t -> case t of
   _ -> Nothing
 
 rename :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Term f -> Term f
-rename old new term | old == new = term
-rename old new term@(Term _ typeChecker binding) = case binding of
-  Binding (Variable name) -> if name == old then variable new else term
-  Binding (Abstraction name scope) -> if name == old then term else checkedAbstraction name typeChecker (rename old new scope)
-  Binding (Expression body) -> checkedExpression typeChecker $ rename old new <$> body
-  Annotation a b -> let a' = rename old new a
-                        b' = rename old new b in checkedTyping (check b' a') (Annotation a' b')
-  Type _ -> term
-  Implicit -> term
+rename old new (Term freeVariables typeChecker typing) = Term (replace old new freeVariables) typeChecker $ renameTypingBy (rename old new) old new typing
+  where replace old new set = if Set.member old set then Set.insert new $ Set.delete old set else set
 
 renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
 renameUnification old new (Unification out) = Unification $ renameTypingBy (renameUnification old new) old new out
