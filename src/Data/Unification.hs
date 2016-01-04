@@ -31,7 +31,3 @@ unified (Unification out) = do
 
 into :: Functor f => Term f -> Unification f
 into term = Unification $ into <$> out term
-
-instance Renameable (Unification f) where
-  rename' old new (Unification out) = Unification out
-  rename' _ _ u = u
