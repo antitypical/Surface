@@ -78,18 +78,18 @@ rename old new term@(Term _ typeChecker binding) = case binding of
   Implicit -> term
 
 renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
-renameUnification old new (Unification out) = Unification $ renameTypingBy renameUnification old new out
+renameUnification old new (Unification out) = Unification $ renameTypingBy (renameUnification old new) old new out
 renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
 
-renameTypingBy :: Functor f => (Name -> Name -> g f -> g f) -> Name -> Name -> Typing (Binding f) (g f) -> Typing (Binding f) (g f)
+renameTypingBy :: Functor f => (g f -> g f) -> Name -> Name -> Typing (Binding f) (g f) -> Typing (Binding f) (g f)
 renameTypingBy _ old new typing | old == new = typing
 renameTypingBy f old new typing = case typing of
   Binding (Variable name) -> if name == old then Binding (Variable new) else typing
-  Binding (Abstraction name scope) -> if name == old then typing else Binding $ Abstraction name (f old new scope)
-  Binding (Expression body) -> Binding $ Expression $ f old new <$> body
+  Binding (Abstraction name scope) -> if name == old then typing else Binding $ Abstraction name (f scope)
+  Binding (Expression body) -> Binding $ Expression $ f <$> body
 
-  Annotation a b -> let a' = f old new a
-                        b' = f old new b in Annotation a' b'
+  Annotation a b -> let a' = f a
+                        b' = f b in Annotation a' b'
 
   Type _ -> typing
   Implicit -> typing
