@@ -13,6 +13,7 @@ class Unifiable a where
 data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
 
 deriving instance (Eq (Term f), Eq (f (Unification f))) => Eq (Unification f)
+deriving instance (Show (Term f), Show (f (Unification f))) => Show (Unification f)
 
 expected :: Functor f => Unification f -> Term f
 expected (Conflict expected _) = expected
