@@ -6,8 +6,8 @@ import Data.Typing
 import Data.Term.Types
 import qualified Data.Set as Set
 
-class Unifiable a where
-  unify :: a -> a -> Maybe a
+class Unifiable e where
+  unifyBy :: (f e -> f e -> Unification e) -> e (f e) -> e (f e) -> Maybe (e (Unification e))
 
 
 data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
