@@ -17,6 +17,3 @@ data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term 
 
 instance Eq (f (Term f)) => Eq (Term f) where
   a == b = freeVariables a == freeVariables b && out a == out b
-
-class Renameable t where
-  rename' :: Name -> Name -> t -> t
