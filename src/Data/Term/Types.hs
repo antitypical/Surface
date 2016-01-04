@@ -29,3 +29,6 @@ unified (Conflict _ _) = Nothing
 unified (Unification out) = do
   out <- mapM unified out
   return $ Term Set.empty (const $ Left "Unification does not preserve typecheckers") out
+
+into :: Functor f => Term f -> Unification f
+into term = Unification $ into <$> out term
