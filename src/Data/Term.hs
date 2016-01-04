@@ -63,10 +63,9 @@ inferSpecific :: Term f -> Inferer (Term f)
 inferSpecific = const . Right
 
 byChecking :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
-byChecking inferer = checker
-  where checker expected context = do
-          actual <- inferer context
-          actual `expectUnifiable` expected
+byChecking inferer expected context = do
+  actual <- inferer context
+  actual `expectUnifiable` expected
 
 maxBoundVariable :: (Foldable f, Functor f) => Term f -> Maybe Name
 maxBoundVariable = cata $ \ t -> case t of
