@@ -142,7 +142,7 @@ unify expected actual = case (out expected, out actual) of
   (Annotation term1 type1, Annotation term2 type2) -> Unification (Annotation (unify term1 term2) (unify type1 type2))
 
   (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) | name1 == name2 -> Unification (Binding $ Abstraction name1 (unify scope1 scope2))
-  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> Unification (Binding $ Abstraction name1 (rename' name name1 (unify (rename name1 name scope1) (rename name2 name scope2))))
+  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> Unification (Binding $ Abstraction name1 (renameUnification name name1 (unify (rename name1 name scope1) (rename name2 name scope2))))
     where name = pick $ freeVariables scope1 `mappend` freeVariables scope2
 
   (Binding (Abstraction name scope), _) | Set.notMember name (freeVariables scope) -> unify scope actual
