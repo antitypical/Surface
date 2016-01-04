@@ -59,6 +59,9 @@ check expected term context = do
 expectUnifiable :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Result (Term f)
 expectUnifiable expected actual = maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'.\n") Right $ unified $ unify expected actual
 
+inferSpecific :: Term f -> Inferer (Term f)
+inferSpecific = const . Right
+
 byChecking :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
 byChecking inferer = checker
   where checker expected context = do
