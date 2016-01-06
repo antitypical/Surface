@@ -4,6 +4,7 @@ import qualified Data.Term.Spec
 import qualified Data.Either as Either
 import Test.Assertions
 import Test.Hspec
+import Test.Hspec.QuickCheck
 
 main :: IO ()
 main = hspec . parallel $ do
@@ -39,3 +40,7 @@ main = hspec . parallel $ do
 
     it "is not associative" $
       (_type' --> _type') --> _type' `shouldNotBe` _type' --> (_type' --> _type')
+
+  describe "checkIsType" $ do
+    prop "matches Type" $
+      \ n -> checkIsType (_type n) mempty `shouldSatisfy` Either.isRight
