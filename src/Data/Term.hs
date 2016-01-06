@@ -26,7 +26,7 @@ annotation term type' = checkedTyping typeChecker $ Annotation term type'
   where typeChecker against context = typeOf term type' context >>= expectUnifiable against
 
 
-checkedAbstraction :: Name -> TypeChecker (Term f) -> Term f -> Term f
+checkedAbstraction :: Name -> Checker (Term f) -> Term f -> Term f
 checkedAbstraction name typeChecker scope = Term (Set.delete name $ freeVariables scope) typeChecker (Binding (Abstraction name scope))
 
 -- | Constructs an abstraction term with a name, the type of that name, and the scope which the name is available within.
@@ -35,13 +35,13 @@ typedAbstraction name type' scope = checkedAbstraction name typeChecker scope
   where typeChecker against = typeOf scope against . Map.insert name type'
 
 
-checkedTyping :: Foldable f => TypeChecker (Term f) -> Typing (Binding f) (Term f) -> Term f
+checkedTyping :: Foldable f => Checker (Term f) -> Typing (Binding f) (Term f) -> Term f
 checkedTyping typeChecker t = Term (foldMap freeVariables t) typeChecker t
 
-checkedBinding :: Foldable f => TypeChecker (Term f) -> Binding f (Term f) -> Term f
+checkedBinding :: Foldable f => Checker (Term f) -> Binding f (Term f) -> Term f
 checkedBinding typeChecker = checkedTyping typeChecker . Binding
 
-checkedExpression :: Foldable f => TypeChecker (Term f) -> f (Term f) -> Term f
+checkedExpression :: Foldable f => Checker (Term f) -> f (Term f) -> Term f
 checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
 _type :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Int -> Term f
@@ -130,7 +130,7 @@ para :: Functor f => (Typing (Binding f) (Term f, a) -> a) -> Term f -> a
 para f = f . fmap fanout . out
   where fanout a = (a, para f a)
 
-byUnifying :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => TypeChecker (Term f) -> TypeChecker (Term f) -> TypeChecker (Term f)
+byUnifying :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Checker (Term f) -> Checker (Term f) -> Checker (Term f)
 byUnifying a b against context = do
   a' <- a against context
   b' <- b against context

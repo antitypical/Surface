@@ -16,7 +16,7 @@ type TypeChecker term = Checker term
 type Inferer term = Context term -> Result term
 type Checker term = term -> Context term -> Result term
 
-data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term f), out :: Typing (Binding f) (Term f) }
+data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Checker (Term f), out :: Typing (Binding f) (Term f) }
 
 data Unification f = Unification (Set.Set Name) (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
 
