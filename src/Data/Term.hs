@@ -61,7 +61,7 @@ expectUnifiable expected actual = maybe (Left $ "error: Unification failed.\nExp
 checkInferred :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
 checkInferred inferer expected context = do
   actual <- inferer context
-  actual `expectUnifiable` expected
+  expected `expectUnifiable` actual
 
 inferTypeOf :: Term f -> Inferer (Term f)
 inferTypeOf = (`typeOf` implicit)
