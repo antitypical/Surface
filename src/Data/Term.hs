@@ -23,9 +23,7 @@ abstract f = abstraction name scope
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
 annotation :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping typeChecker $ Annotation term type'
-  where typeChecker against context = do
-          _ <- checkInferred (const $ Right type') against context
-          typeOf term against context
+  where typeChecker against context = typeOf term type' context >>= expectUnifiable against
 
 
 checkedAbstraction :: Name -> TypeChecker (Term f) -> Term f -> Term f
