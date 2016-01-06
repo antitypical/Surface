@@ -26,7 +26,7 @@ instance Arbitrary (Term Expression) where
             : (1, expression <$> (Application <$> recur names <*> recur names))
             : ((,) 4 . pure . variable <$> names)
           recur names = scale (`div` 2) (arbitraryInScope names)
-          expression = checkedExpression (const (Right implicit))
+          expression = checkedExpression (checkInferred (const $ Right implicit))
 
 spec :: Spec
 spec = do
@@ -67,7 +67,7 @@ spec = do
     it "renders left-nested function types with parentheses" $
       show ((_type' --> _type') --> _type') `shouldBe` "(Type → Type) → Type"
 
-  describe "typeOf" $ do
+  describe "inferTypeOf" $ do
     prop "infers the type of Type" $
       \ n -> infer (_type n) `shouldResult` _type (n + 1)
 
@@ -154,10 +154,10 @@ spec = do
 
 
 infer :: Term Expression -> Either String (Term Expression)
-infer term = typeOf term mempty
+infer = (`inferTypeOf` mempty)
 
 inferBinding :: Name -> Term Expression -> Term Expression -> Either String (Term Expression)
-inferBinding name type' term = typeOf term $ Map.singleton name type'
+inferBinding name type' term = inferTypeOf term $ Map.singleton name type'
 
 identity :: Term Expression
 identity = lambda _type' $ \ t -> lambda t id
