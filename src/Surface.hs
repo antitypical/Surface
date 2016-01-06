@@ -68,11 +68,7 @@ apply a b = checkedExpression (checkInferred inferType) $ Application a b
 
 
 checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
-checkHasFunctionType term context = do
-  type' <- inferTypeOf term context
-  case out type' of
-    Binding (Expression (Lambda type' body)) -> return (type', body)
-    _ -> Left "expected function type"
+checkHasFunctionType term context = inferTypeOf term context >>= checkIsFunctionType
 
 checkIsFunctionType :: Term Expression -> Result (Term Expression, Term Expression)
 checkIsFunctionType type' = case out type' of
