@@ -6,6 +6,7 @@ module Surface (
   (-->),
   apply,
   checkHasFunctionType,
+  checkIsFunctionType,
   checkIsType,
 ) where
 
@@ -73,6 +74,10 @@ checkHasFunctionType term context = do
     Binding (Expression (Lambda type' body)) -> return (type', body)
     _ -> Left "expected function type"
 
+checkIsFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
+checkIsFunctionType type' = case out type' of
+  Binding (Expression (Lambda type' body)) -> return (type', body)
+  _ -> Left "Expected function type."
 
 instance Monoid a => Alternative (Either a) where
   empty = Left mempty
