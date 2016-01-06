@@ -6,6 +6,7 @@ module Surface (
   (-->),
   apply,
   checkHasFunctionType,
+  checkIsType,
 ) where
 
 import Prelude hiding (pi)
