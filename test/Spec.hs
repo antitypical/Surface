@@ -45,5 +45,5 @@ main = hspec . parallel $ do
     prop "matches Type" $
       \ n -> checkIsType (_type n) mempty `shouldSatisfy` Either.isRight
 
-    prop "matches function types" $ do
+    prop "matches function types" $
       \ m n -> checkIsType (_type m --> _type n) mempty `shouldSatisfy` Either.isRight
