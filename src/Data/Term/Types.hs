@@ -11,8 +11,6 @@ type Result a = Either String a
 
 type Context term = Map.Map Name term
 
-type TypeChecker term = Checker term
-
 type Inferer term = Context term -> Result term
 type Checker term = term -> Context term -> Result term
 
