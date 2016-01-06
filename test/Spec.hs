@@ -43,7 +43,7 @@ main = hspec . parallel $ do
 
   describe "checkIsType" $ do
     prop "matches Type" $
-      \ n -> checkIsType (_type n) mempty `shouldResult` _type n
+      \ n -> checkIsType (_type n) mempty `shouldResult` _type'
 
     prop "matches function types" $
-      \ m n -> checkIsType (_type m --> _type n) mempty `shouldResult` (_type m --> _type n)
+      \ m n -> checkIsType (_type m --> _type n) mempty `shouldResult` (_type' --> _type')
