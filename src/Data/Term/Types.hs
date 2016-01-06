@@ -18,24 +18,24 @@ type Checker term = term -> Context term -> Result term
 
 data Term f = Term { freeVariables :: Set.Set Name, typeOf :: TypeChecker (Term f), out :: Typing (Binding f) (Term f) }
 
-data Unification f = Unification (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
+data Unification f = Unification (Set.Set Name) (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
 
 expected :: Functor f => Unification f -> Term f
 expected (Conflict expected _) = expected
-expected (Unification out) = Term Set.empty (const . const $ Left "Unification does not preserve typecheckers.\n") (expected <$> out)
+expected (Unification freeVariables out) = Term freeVariables (const . const $ Left "Unification does not preserve typecheckers.\n") (expected <$> out)
 
 actual :: Functor f => Unification f -> Term f
 actual (Conflict _ actual) = actual
-actual (Unification out) = Term Set.empty (const . const $ Left "Unification does not preserve typecheckers.\n") (actual <$> out)
+actual (Unification freeVariables out) = Term freeVariables (const . const $ Left "Unification does not preserve typecheckers.\n") (actual <$> out)
 
 unified :: Traversable f => Unification f -> Maybe (Term f)
 unified (Conflict _ _) = Nothing
-unified (Unification out) = do
+unified (Unification freeVariables out) = do
   out <- mapM unified out
-  return $ Term Set.empty (const . const $ Left "Unification does not preserve typecheckers.\n") out
+  return $ Term freeVariables (const . const $ Left "Unification does not preserve typecheckers.\n") out
 
 into :: Functor f => Term f -> Unification f
-into term = Unification $ into <$> out term
+into term = Unification (freeVariables term) $ into <$> out term
 
 
 instance Eq (f (Term f)) => Eq (Term f) where

@@ -78,7 +78,7 @@ replace :: Ord a => a -> a -> Set.Set a -> Set.Set a
 replace old new set = if Set.member old set then Set.insert new $ Set.delete old set else set
 
 renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
-renameUnification old new (Unification out) = Unification $ renameTypingBy (renameUnification old new) old new out
+renameUnification old new (Unification freeVariables out) = Unification (replace old new freeVariables) $ renameTypingBy (renameUnification old new) old new out
 renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
 
 renameTypingBy :: Functor f => (g f -> g f) -> Name -> Name -> Typing (Binding f) (g f) -> Typing (Binding f) (g f)
@@ -144,15 +144,17 @@ unify expected actual = case (out expected, out actual) of
   (Implicit, _) -> into actual
 
   (Type _, Type _) -> into expected
-  (Annotation term1 type1, Annotation term2 type2) -> Unification (Annotation (unify term1 term2) (unify type1 type2))
+  (Annotation term1 type1, Annotation term2 type2) -> Unification free (Annotation (unify term1 term2) (unify type1 type2))
 
-  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) | name1 == name2 -> Unification (Binding $ Abstraction name1 (unify scope1 scope2))
-  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> Unification (Binding $ Abstraction name1 (renameUnification name name1 (unify (rename name1 name scope1) (rename name2 name scope2))))
-    where name = pick $ freeVariables scope1 `mappend` freeVariables scope2
+  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) | name1 == name2 -> Unification free (Binding $ Abstraction name1 (unify scope1 scope2))
+  (Binding (Abstraction name1 scope1), Binding (Abstraction name2 scope2)) -> Unification (Set.delete name1 free) (Binding $ Abstraction name1 (renameUnification name name1 (unify (rename name1 name scope1) (rename name2 name scope2))))
+    where name = pick free
+          free = freeVariables scope1 `Set.union` freeVariables scope2
 
   (Binding (Abstraction name scope), _) | Set.notMember name (freeVariables scope) -> unify scope actual
   (_, Binding (Abstraction name scope)) | Set.notMember name (freeVariables scope) -> unify expected scope
 
-  (Binding (Expression e1), Binding (Expression e2)) | Just e <- unifyBy unify e1 e2 -> Unification $ Binding $ Expression e
+  (Binding (Expression e1), Binding (Expression e2)) | Just e <- unifyBy unify e1 e2 -> Unification free $ Binding $ Expression e
 
   _ -> Conflict expected actual
+  where free = freeVariables expected `Set.union` freeVariables actual
