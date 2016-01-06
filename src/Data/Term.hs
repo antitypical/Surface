@@ -73,7 +73,9 @@ maxBoundVariable = cata $ \ t -> case t of
 
 rename :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Term f -> Term f
 rename old new (Term freeVariables typeChecker typing) = Term (replace old new freeVariables) typeChecker $ renameTypingBy (rename old new) old new typing
-  where replace old new set = if Set.member old set then Set.insert new $ Set.delete old set else set
+
+replace :: Ord a => a -> a -> Set.Set a -> Set.Set a
+replace old new set = if Set.member old set then Set.insert new $ Set.delete old set else set
 
 renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
 renameUnification old new (Unification out) = Unification $ renameTypingBy (renameUnification old new) old new out
