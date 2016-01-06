@@ -24,7 +24,7 @@ abstract f = abstraction name scope
 annotation :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Term f
 annotation term type' = checkedTyping typeChecker $ Annotation term type'
   where typeChecker against context = do
-          _ <- checkInferred (inferSpecific type') against context
+          _ <- checkInferred (const $ Right type') against context
           typeOf term against context
 
 
@@ -47,7 +47,7 @@ checkedExpression :: Foldable f => TypeChecker (Term f) -> f (Term f) -> Term f
 checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
 _type :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Int -> Term f
-_type n = Term mempty (checkInferred $ inferSpecific (_type (n + 1))) $ Type n
+_type n = Term mempty (checkInferred $ const $ Right (_type (n + 1))) $ Type n
 
 _type' :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f
 _type' = _type 0

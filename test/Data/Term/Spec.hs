@@ -26,7 +26,7 @@ instance Arbitrary (Term Expression) where
             : (1, expression <$> (Application <$> recur names <*> recur names))
             : ((,) 4 . pure . variable <$> names)
           recur names = scale (`div` 2) (arbitraryInScope names)
-          expression = checkedExpression (checkInferred (inferSpecific implicit))
+          expression = checkedExpression (checkInferred (const $ Right implicit))
 
 spec :: Spec
 spec = do
