@@ -45,11 +45,17 @@ infixr `pi`
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-pi t f = checkedExpression (checkInferred inferType) $ Lambda t body
+pi t f = checkedExpression checkType $ Lambda t body
   where body = abstract f
-        inferType context = do
+        checkType expected context = case out expected of
+          Binding (Expression (Lambda from to)) -> checkTypeAgainst from to context
+          Type _ -> checkTypeAgainst _type' _type' context
+          _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
+        checkTypeAgainst from to context = do
           _ <- checkIsType t context
+          _ <- expectUnifiable from t
           bodyType <- checkIsType body (extendContext t context body)
+          _ <- expectUnifiable to bodyType
           return $ case shadowing body bodyType of
             Just name -> t `pi` \ v -> substitute name v bodyType
             _ -> t --> bodyType
