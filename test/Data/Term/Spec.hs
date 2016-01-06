@@ -67,7 +67,7 @@ spec = do
     it "renders left-nested function types with parentheses" $
       show ((_type' --> _type') --> _type') `shouldBe` "(Type → Type) → Type"
 
-  describe "typeOf" $ do
+  describe "inferTypeOf" $ do
     prop "infers the type of Type" $
       \ n -> infer (_type n) `shouldResult` _type (n + 1)
 
