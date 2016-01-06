@@ -58,9 +58,6 @@ implicit = Term mempty (const . Right) Implicit
 expectUnifiable :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Result (Term f)
 expectUnifiable expected actual = maybe (Left $ "error: Unification failed.\nExpected: '" ++ show expected ++ "'\n  Actual: '" ++ show actual ++ "'.\n") Right $ unified $ unify expected actual
 
-inferSpecific :: Term f -> Inferer (Term f)
-inferSpecific = const . Right
-
 checkInferred :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Inferer (Term f) -> Checker (Term f)
 checkInferred inferer expected context = do
   actual <- inferer context
