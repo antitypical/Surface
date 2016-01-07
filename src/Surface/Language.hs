@@ -66,7 +66,7 @@ a --> b = checkedExpression checkType $ Lambda a b
           a' <- checkIsType a context
           _ <- expectUnifiable from a
           b' <- typeOf b to context
-          _ <- expectUnifiable to b'
+          _ <- expectUnifiable to b
           return $ a' --> b'
 
 -- | Construct the application of one term to another. The first argument will be checked as a function type, and the second will be checked against that type’s domain. The resulting type will be the substitution of the domain type into the body.
