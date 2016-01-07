@@ -8,10 +8,18 @@ import Data.Name.Internal
 import Data.Term
 import Data.Term.Types
 import Data.Typing
+import Data.Unification
 import Prelude hiding (pi)
 import qualified Data.Set as Set
 
 type Term' = Term Expression
+
+_type :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Int -> Term f
+_type n = Term mempty (checkInferred $ const $ Right (_type (n + 1))) $ Type n
+
+_type' :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f
+_type' = _type 0
+
 
 infixr `lambda`
 

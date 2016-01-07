@@ -44,12 +44,6 @@ checkedBinding typeChecker = checkedTyping typeChecker . Binding
 checkedExpression :: Foldable f => Checker (Term f) -> f (Term f) -> Term f
 checkedExpression typeChecker = checkedBinding typeChecker . Expression
 
-_type :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Int -> Term f
-_type n = Term mempty (checkInferred $ const $ Right (_type (n + 1))) $ Type n
-
-_type' :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f
-_type' = _type 0
-
 implicit :: Term f
 implicit = Term mempty (const . Right) Implicit
 
