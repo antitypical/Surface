@@ -57,10 +57,16 @@ infixr -->
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
-a --> b = checkedExpression (checkInferred inferType) $ Lambda a b
-  where inferType context = do
+a --> b = checkedExpression checkType $ Lambda a b
+  where checkType expected context = case out expected of
+          Binding (Expression (Lambda from to)) -> checkTypeAgainst from to context
+          Type _ -> checkTypeAgainst _type' _type' context
+          _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
+        checkTypeAgainst from to context = do
           a' <- checkIsType a context
-          b' <- checkIsType b context
+          _ <- expectUnifiable from a
+          b' <- typeOf b to context
+          _ <- expectUnifiable to b'
           return $ a' --> b'
 
 -- | Construct the application of one term to another. The first argument will be checked as a function type, and the second will be checked against that type’s domain. The resulting type will be the substitution of the domain type into the body.
