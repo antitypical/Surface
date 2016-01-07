@@ -1,7 +1,6 @@
 module Surface.Pair where
 
 import Data.Expression
-import Data.Term
 import Data.Term.Types
 import Surface.Language
 
