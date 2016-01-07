@@ -73,6 +73,10 @@ apply a b = checkedExpression (checkInferred inferType) $ Application a b
           return $ applySubstitution type' body
 
 
+checkIsType :: Term Expression -> Inferer (Term Expression)
+checkIsType term context = typeOf term _type' context <|> typeOf term (_type' --> _type') context
+
+
 checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
 checkHasFunctionType term context = inferTypeOf term context >>= checkIsFunctionType
 
@@ -81,14 +85,12 @@ checkIsFunctionType type' = case out type' of
   Binding (Expression (Lambda type' body)) -> return (type', body)
   _ -> Left "Expected function type."
 
+
 instance Monoid a => Alternative (Either a) where
   empty = Left mempty
   Left a <|> Left b = Left $ a `mappend` b
   Right a <|> _ = Right a
   _ <|> Right b = Right b
-
-checkIsType :: Term Expression -> Inferer (Term Expression)
-checkIsType term context = typeOf term _type' context <|> typeOf term (_type' --> _type') context
 
 
 instance Show (Term Expression) where
