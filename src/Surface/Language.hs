@@ -79,7 +79,7 @@ apply a b = checkedExpression (checkInferred inferType) $ Application a b
 
 
 checkIsType :: Term Expression -> Inferer (Term Expression)
-checkIsType term context = typeOf term _type' context <|> typeOf term (_type' --> _type') context
+checkIsType term = typeOf term _type'
 
 
 checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
