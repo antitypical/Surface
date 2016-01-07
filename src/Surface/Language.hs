@@ -65,7 +65,7 @@ a --> b = checkedExpression checkType $ Lambda a b
         checkTypeAgainst from to context = do
           a' <- checkIsType a context
           _ <- expectUnifiable from a
-          b' <- typeOf b to context
+          b' <- checkIsType b context
           _ <- expectUnifiable to b
           return $ a' --> b'
 
