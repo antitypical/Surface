@@ -19,6 +19,7 @@ import Data.Term as Surface'
 import Data.Term.Types as Surface'
 import Data.Typing as Surface'
 import Data.Unification as Surface'
+import Surface.Language as Surface'
 import Control.Applicative
 import qualified Data.Set as Set
 
