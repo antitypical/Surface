@@ -4,7 +4,6 @@ module Surface.Language where
 import Control.Applicative
 import Data.Binding
 import Data.Expression
-import Data.Name
 import Data.Name.Internal
 import Data.Term
 import Data.Term.Types
