@@ -12,6 +12,9 @@ Module definitions ! key = case List.find ((== key) . symbol) definitions of
   Just x -> x
   _ -> error "Expected definition to exist"
 
+checkModule :: Context (Term Expression) -> Module -> Result [Term Expression]
+checkModule context (Module definitions) = sequence $ checkDefinition context <$> definitions
+
 data Definition = Definition { symbol :: String, getType :: Term Expression, getValue :: Term Expression }
 
 checkDefinition :: Context (Term Expression) -> Definition -> Result (Term Expression)
