@@ -6,7 +6,7 @@ import Data.Term.Types
 import Surface.Language
 
 _module :: Module
-_module = Module $ [
+_module = Module [
     Definition "Pair" _Pair
   ]
 
