@@ -46,6 +46,7 @@ test-suite Surface-test
   main-is:             Spec.hs
   other-modules:       Data.Name.Internal.Spec
                      , Data.Term.Spec
+                     , Surface.Language.Spec
                      , Surface.Pair.Spec
                      , Test.Assertions
   build-depends:       base
