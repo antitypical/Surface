@@ -8,7 +8,7 @@ import Test.Hspec
 
 spec :: Spec
 spec = do
-  describe "_Pair" $ do
+  describe "Pair" $ do
     it "should have an inferable type" $
       inferTypeOf (getValue _Pair) mempty `shouldSatisfy` Either.isRight
 
