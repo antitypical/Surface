@@ -53,9 +53,9 @@ pi t f = checkedExpression checkType $ Lambda t body
           _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
         checkTypeAgainst from to context = do
           _ <- checkIsType t context
-          _ <- expectUnifiable from t
+          _ <- typeOf t from context
           bodyType <- checkIsType body (extendContext t context body)
-          _ <- expectUnifiable to bodyType
+          _ <- typeOf bodyType to context
           return $ case shadowing body bodyType of
             Just name -> t `pi` \ v -> substitute name v bodyType
             _ -> t --> bodyType
