@@ -5,4 +5,4 @@ import Data.Term.Types
 
 data Module = Module [Definition]
 
-data Definition = Definition String (Term Expression)
+data Definition = Definition { symbol :: String, getType :: Term Expression }
