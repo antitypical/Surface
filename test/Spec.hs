@@ -19,7 +19,7 @@ main = hspec . parallel $ do
       (_type' `lambda` const (_type' `lambda` const _type')) `shouldBe` Term mempty (typeOf implicit) (Binding $ Expression $ Lambda _type' $ abstraction (Local 1) $ Term mempty (typeOf implicit) $ Binding $ Expression $ Lambda _type' $ abstraction (Local 0) _type')
 
     it "rejects non-Type types" $
-      inferTypeOf (_type' `lambda` \ a -> a `lambda` \ a' -> a' `lambda` const _type') mempty `shouldSatisfy` Either.isLeft
+      inferTypeOf (_type' `lambda` \ b -> b `lambda` \ a -> a `lambda` const _type') mempty `shouldSatisfy` Either.isLeft
 
   describe "apply" $ do
     it "rejects non-function operators" $
