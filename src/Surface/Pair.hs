@@ -7,8 +7,8 @@ import Surface.Language
 import qualified Data.Map as Map
 
 _module :: Module
-_module = Module $ Map.fromList [
-    ("Pair", _Pair)
+_module = Module $ [
+    Definition "Pair" _Pair
   ]
 
 _Pair :: Term Expression
