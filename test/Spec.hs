@@ -1,4 +1,5 @@
 import Surface
+import qualified Surface.Pair.Spec
 import qualified Data.Name.Internal.Spec
 import qualified Data.Term.Spec
 import qualified Data.Either as Either
@@ -10,6 +11,7 @@ main :: IO ()
 main = hspec . parallel $ do
   describe "Data.Name.Internal" Data.Name.Internal.Spec.spec
   describe "Data.Term" Data.Term.Spec.spec
+  describe "Surface.Pair" Surface.Pair.Spec.spec
 
   describe "lambda" $ do
     it "produces binding abstractions" $
