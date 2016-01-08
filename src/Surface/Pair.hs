@@ -4,7 +4,6 @@ import Data.Expression
 import Data.Module
 import Data.Term.Types
 import Surface.Language
-import qualified Data.Map as Map
 
 _module :: Module
 _module = Module $ [
