@@ -6,4 +6,4 @@ import qualified Data.Map as Map
 
 data Module = Module (Map.Map String (Term Expression))
 
-data Definition = Definition String (Term Expression) (Term Expression)
+data Definition = Definition String (Term Expression)
