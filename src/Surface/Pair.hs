@@ -1,14 +1,11 @@
 module Surface.Pair where
 
-import Data.Expression
 import Data.Module
-import Data.Term.Types
 import Surface.Language
 
 _module :: Module
 _module = Module [
-    Definition "Pair" _Pair
+    Definition "Pair"
+      (_type' `lambda` \ a -> _type' `lambda` \ b -> _type' `lambda` \ motive -> (a --> b --> motive) --> motive)
+      (_type' `lambda` \ a -> _type' `lambda` \ b -> _type' `lambda` \ motive -> (a --> b --> motive) --> motive)
   ]
-
-_Pair :: Term Expression
-_Pair = _type' `lambda` \ a -> _type' `lambda` \ b -> _type' `lambda` \ motive -> (a --> b --> motive) --> motive

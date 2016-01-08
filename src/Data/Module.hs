@@ -11,4 +11,4 @@ Module definitions ! key = case List.find ((== key) . symbol) definitions of
   Just x -> x
   _ -> error "Expected definition to exist"
 
-data Definition = Definition { symbol :: String, getType :: Term Expression }
+data Definition = Definition { symbol :: String, getType :: Term Expression, getValue :: Term Expression }
