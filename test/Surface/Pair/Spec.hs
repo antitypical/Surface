@@ -9,7 +9,7 @@ import Test.Hspec
 spec :: Spec
 spec = do
   describe "Pair" $ do
-    it "should have an inferable type" $
+    it "has an inferable type" $
       inferTypeOf (getValue _Pair) mempty `shouldSatisfy` Either.isRight
 
   where _Pair = _module ! "Pair"
