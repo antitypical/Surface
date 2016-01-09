@@ -1,4 +1,4 @@
-module Data.Unification where
+module Surface.Unification where
 
 import Data.Term.Types
 

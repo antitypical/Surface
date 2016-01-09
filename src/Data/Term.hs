@@ -5,7 +5,7 @@ import Data.Binding
 import Data.Name
 import Data.Typing
 import Data.Term.Types
-import Data.Unification
+import Surface.Unification
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 

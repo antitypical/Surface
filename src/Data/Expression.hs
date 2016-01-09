@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 module Data.Expression where
 
-import Data.Unification
+import Surface.Unification
 
 data Expression recur
   = Application recur recur

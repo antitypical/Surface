@@ -8,7 +8,7 @@ import Data.Name.Internal
 import Data.Term
 import Data.Term.Types
 import Data.Typing
-import Data.Unification
+import Surface.Unification
 import Prelude hiding (pi)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
