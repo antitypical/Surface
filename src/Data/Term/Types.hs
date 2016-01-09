@@ -22,6 +22,9 @@ data Term f = Term { freeVariables :: Set.Set Name, typeOf :: Checker (Term f), 
 
 data Unification f = Unification (Set.Set Name) (Checker (Term f)) (Typing (Binding f) (Unification f)) | Conflict (Term f) (Term f)
 
+class Unifiable e where
+  unifyBy :: (f e -> f e -> Unification e) -> e (f e) -> e (f e) -> Maybe (e (Unification e))
+
 expected :: Functor f => Unification f -> Term f
 expected (Conflict expected _) = expected
 expected (Unification freeVariables typeChecker out) = Term freeVariables typeChecker (expected <$> out)
