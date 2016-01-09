@@ -10,6 +10,7 @@ import Data.Term.Types
 import Data.Typing
 import Data.Unification
 import Prelude hiding (pi)
+import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 type Term' = Term Expression
@@ -97,6 +98,10 @@ checkFunctionType check expected context = case out expected of
 
 weakHeadNormalForm :: Environment (Term Expression) -> Term Expression -> Term Expression
 weakHeadNormalForm environment term = case out term of
+  Binding (Variable name) -> case Map.lookup name environment of
+    Just v -> v
+    _ -> term
+
   _ -> term
 
 instance Monoid a => Alternative (Either a) where
