@@ -23,8 +23,11 @@ library
                      , Data.Term
                      , Data.Term.Types
                      , Data.Typing
-                     , Data.Unification
                      , Surface
+                     , Surface.Language
+                     , Surface.Pair
+                     , Surface.Renaming
+                     , Surface.Unification
   build-depends:       base >= 4.7 && < 5
                      , containers
   default-language:    Haskell2010
@@ -44,6 +47,8 @@ test-suite Surface-test
   main-is:             Spec.hs
   other-modules:       Data.Name.Internal.Spec
                      , Data.Term.Spec
+                     , Surface.Language.Spec
+                     , Surface.Pair.Spec
                      , Test.Assertions
   build-depends:       base
                      , Surface
