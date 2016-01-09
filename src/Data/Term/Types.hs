@@ -10,6 +10,7 @@ import qualified Data.Set as Set
 type Result a = Either String a
 
 type Context term = Map.Map Name term
+type Environment term = Map.Map Name term
 
 type Inferer term = Context term -> Result term
 type Checker term = term -> Context term -> Result term
