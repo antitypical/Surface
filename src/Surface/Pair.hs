@@ -1,10 +1,9 @@
 module Surface.Pair where
 
-import Data.Expression
 import Data.Module
 import Surface.Language
 
-_module :: Module Expression
+_module :: Module Term'
 _module = Module [
     Definition "Pair"
       (_type' --> _type' --> _type')
