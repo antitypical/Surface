@@ -89,6 +89,7 @@ checkIsFunctionType type' = case out type' of
 
 checkFunctionType :: (Term Expression -> Term Expression -> Context (Term Expression) -> Result (Term Expression)) -> Checker (Term Expression)
 checkFunctionType check expected context = case out expected of
+  Binding (Abstraction _ scope) -> checkFunctionType check scope context
   Binding (Expression (Lambda from to)) -> check from to context
   Type _ -> check _type' _type' context
   _ -> check implicit implicit context >>= expectUnifiable expected
