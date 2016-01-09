@@ -95,6 +95,10 @@ checkFunctionType check expected context = case out expected of
   _ -> check implicit implicit context >>= expectUnifiable expected
 
 
+weakHeadNormalForm :: Environment (Term Expression) -> Term Expression -> Term Expression
+weakHeadNormalForm environment term = case out term of
+  _ -> term
+
 instance Monoid a => Alternative (Either a) where
   empty = Left mempty
   Left a <|> Left b = Left $ a `mappend` b
