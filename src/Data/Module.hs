@@ -3,7 +3,6 @@ module Data.Module where
 
 import qualified Data.List as List
 import Data.Term.Types
-import Surface.Unification
 import Surface.Language
 
 (!) :: Module term -> String -> Definition term
