@@ -45,6 +45,7 @@ instance Eq (f (Term f)) => Eq (Term f) where
 
 instance (Eq (Term f), Eq (f (Unification f))) => Eq (Unification f) where
   (Unification freeVariablesA _ outA) == (Unification freeVariablesB _ outB) = freeVariablesA == freeVariablesB && outA == outB
+  (Conflict a1 b1) == (Conflict a2 b2) = a1 == a2 && b1 == b2
 
 instance (Functor f, Show (Term f), Show (f (Unification f))) => Show (Unification f) where
   show u = "Expected: " ++ show (expected u) ++ "\n"
