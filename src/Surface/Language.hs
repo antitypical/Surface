@@ -99,6 +99,13 @@ checkIsFunctionType type' = case out type' of
   _ -> Left "Expected function type."
 
 
+checkFunctionType :: (Term Expression -> Term Expression -> Context (Term Expression) -> Result (Term Expression)) -> Term Expression ->  Context (Term Expression) -> Result (Term Expression)
+checkFunctionType check expected context = case out expected of
+  Binding (Expression (Lambda from to)) -> check from to context
+  Type _ -> check _type' _type' context
+  _ -> check implicit implicit context >>= expectUnifiable expected
+
+
 instance Monoid a => Alternative (Either a) where
   empty = Left mempty
   Left a <|> Left b = Left $ a `mappend` b
