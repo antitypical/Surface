@@ -9,6 +9,9 @@ import qualified Data.Set as Set
 
 type Result a = Either String a
 
+data Module term = Module [Definition term]
+data Definition term = Definition { symbol :: String, getType :: term, getValue :: term }
+
 type Context term = Map.Map Name term
 type Environment term = Map.Map Name term
 

@@ -1,6 +1,6 @@
 module Surface.Pair where
 
-import Data.Module
+import Data.Term.Types
 import Surface.Language
 
 _module :: Module Term'
