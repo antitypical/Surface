@@ -25,7 +25,7 @@ _type' = _type 0
 infixr `lambda`
 
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
-lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
+lambda :: Term' -> (Term' -> Term') -> Term'
 lambda t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t body
   where body = abstract f
         checkTypeAgainst from to context = do
@@ -41,7 +41,7 @@ lambda t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t b
 infixr `pi`
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
-pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
+pi :: Term' -> (Term' -> Term') -> Term'
 pi t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t body
   where body = abstract f
         checkTypeAgainst from to context = do
@@ -57,7 +57,7 @@ pi t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t body
 infixr -->
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
-(-->) :: Term Expression -> Term Expression -> Term Expression
+(-->) :: Term' -> Term' -> Term'
 a --> b = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda a b
   where checkTypeAgainst from to context = do
           a' <- checkIsType a context
@@ -67,7 +67,7 @@ a --> b = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda a b
           return $ a' --> b'
 
 -- | Construct the application of one term to another. The first argument will be checked as a function type, and the second will be checked against that type’s domain. The resulting type will be the substitution of the domain type into the body.
-apply :: Term Expression -> Term Expression -> Term Expression
+apply :: Term' -> Term' -> Term'
 apply a b = checkedExpression (checkInferred inferType) $ Application a b
   where inferType context = do
           (type', body) <- checkHasFunctionType a context
@@ -75,20 +75,20 @@ apply a b = checkedExpression (checkInferred inferType) $ Application a b
           return $ applySubstitution type' body
 
 
-checkIsType :: Term Expression -> Inferer (Term Expression)
+checkIsType :: Term' -> Inferer Term'
 checkIsType term = typeOf term _type'
 
 
-checkHasFunctionType :: Term Expression -> Context (Term Expression) -> Result (Term Expression, Term Expression)
+checkHasFunctionType :: Term' -> Context Term' -> Result (Term', Term')
 checkHasFunctionType term context = inferTypeOf term context >>= checkIsFunctionType
 
-checkIsFunctionType :: Term Expression -> Result (Term Expression, Term Expression)
+checkIsFunctionType :: Term' -> Result (Term', Term')
 checkIsFunctionType type' = case out type' of
   Binding (Expression (Lambda type' body)) -> return (type', body)
   _ -> Left "Expected function type."
 
 
-checkFunctionType :: (Term Expression -> Term Expression -> Context (Term Expression) -> Result (Term Expression)) -> Checker (Term Expression)
+checkFunctionType :: (Term' -> Term' -> Context Term' -> Result Term') -> Checker Term'
 checkFunctionType check expected context = case out expected of
   Binding (Abstraction _ scope) -> checkFunctionType check scope context
   Binding (Expression (Lambda from to)) -> check from to context
@@ -96,7 +96,7 @@ checkFunctionType check expected context = case out expected of
   _ -> check implicit implicit context >>= expectUnifiable expected
 
 
-weakHeadNormalForm :: Environment (Term Expression) -> Term Expression -> Term Expression
+weakHeadNormalForm :: Environment Term' -> Term' -> Term'
 weakHeadNormalForm environment term@(Term freeVariables typeChecker _) = case out term of
   Binding (Variable name) -> case Map.lookup name environment of
     Just v -> v
@@ -115,7 +115,7 @@ instance Monoid a => Alternative (Either a) where
   _ <|> Right b = Right b
 
 
-instance Show (Term Expression) where
+instance Show Term' where
   show = fst . para (\ b -> case b of
     Binding (Variable n) -> (show n, maxBound)
     Binding (Abstraction _ (_, body)) -> body
