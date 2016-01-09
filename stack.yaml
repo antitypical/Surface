@@ -19,8 +19,6 @@ extra-package-dbs: []
 # Control whether we use the GHC we find on the path
 # system-ghc: true
 
-compiler-check: newer-minor
-
 # Require a specific version of stack, using version ranges
 # require-stack-version: -any # Default
 # require-stack-version: >= 0.1.10.0
