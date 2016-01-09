@@ -16,7 +16,11 @@ import qualified Data.Set as Set
 type Term' = Term Expression
 
 _type :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Int -> Term f
-_type n = Term mempty (checkInferred $ const $ Right (_type (n + 1))) $ Type n
+_type n = Term mempty typeCheck $ Type n
+  where typeCheck expected _ = case out expected of
+          Implicit -> Right $ _type (n + 1)
+          Type _ -> Right expected
+          _ -> Left "Nope"
 
 _type' :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f
 _type' = _type 0
