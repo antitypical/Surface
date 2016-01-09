@@ -7,7 +7,7 @@ import Data.Term.Types
 import Data.Typing
 import qualified Data.Set as Set
 
-rename :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Term f -> Term f
+rename :: Functor f => Name -> Name -> Term f -> Term f
 rename old new (Term freeVariables typeChecker typing) = Term (replace old new freeVariables) typeChecker $ renameTypingBy (rename old new) old new typing
 
 replace :: Ord a => a -> a -> Set.Set a -> Set.Set a
