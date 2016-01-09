@@ -97,14 +97,14 @@ checkFunctionType check expected context = case out expected of
 
 
 weakHeadNormalForm :: Environment (Term Expression) -> Term Expression -> Term Expression
-weakHeadNormalForm environment term = case out term of
+weakHeadNormalForm environment term@(Term freeVariables typeChecker _) = case out term of
   Binding (Variable name) -> case Map.lookup name environment of
     Just v -> v
     _ -> term
 
-  Binding (Expression (Application a b)) -> case out $ weakHeadNormalForm environment a of
+  Binding (Expression (Application a b)) -> let normal = weakHeadNormalForm environment a in case out normal of
     (Binding (Expression (Lambda _ body))) -> weakHeadNormalForm environment $ applySubstitution b body
-    _ -> term
+    _ -> Term freeVariables typeChecker $ Binding $ Expression $ Application normal b
 
   _ -> term
 
