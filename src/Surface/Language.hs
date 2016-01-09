@@ -25,12 +25,8 @@ infixr `lambda`
 
 -- | Construct a lambda from a type and a function from an argument variable to the resulting term. The variable will be picked automatically. The parameter type will be checked against `Type`, but there are no constraints on the type of the result.
 lambda :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-lambda t f = checkedExpression checkType $ Lambda t body
+lambda t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t body
   where body = abstract f
-        checkType expected context = case out expected of
-          Binding (Expression (Lambda from to)) -> checkTypeAgainst from to context
-          Type _ -> checkTypeAgainst _type' _type' context
-          _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
         checkTypeAgainst from to context = do
           _ <- checkIsType t context
           _ <- expectUnifiable from t
@@ -45,12 +41,8 @@ infixr `pi`
 
 -- | Construct a pi type from a type and a function from an argument variable to the resulting type. The variable will be picked automatically. The parameter type will be checked against `Type`, as will the substitution of the parameter type into the body.
 pi :: Term Expression -> (Term Expression -> Term Expression) -> Term Expression
-pi t f = checkedExpression checkType $ Lambda t body
+pi t f = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda t body
   where body = abstract f
-        checkType expected context = case out expected of
-          Binding (Expression (Lambda from to)) -> checkTypeAgainst from to context
-          Type _ -> checkTypeAgainst _type' _type' context
-          _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
         checkTypeAgainst from to context = do
           _ <- checkIsType t context
           _ <- typeOf t from context
@@ -65,12 +57,8 @@ infixr -->
 
 -- | Construct a non-dependent function type between two types. Both operands will be checked against `Type`.
 (-->) :: Term Expression -> Term Expression -> Term Expression
-a --> b = checkedExpression checkType $ Lambda a b
-  where checkType expected context = case out expected of
-          Binding (Expression (Lambda from to)) -> checkTypeAgainst from to context
-          Type _ -> checkTypeAgainst _type' _type' context
-          _ -> checkTypeAgainst implicit implicit context >>= expectUnifiable expected
-        checkTypeAgainst from to context = do
+a --> b = checkedExpression (checkFunctionType checkTypeAgainst) $ Lambda a b
+  where checkTypeAgainst from to context = do
           a' <- checkIsType a context
           _ <- typeOf a from context
           b' <- checkIsType b context
