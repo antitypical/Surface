@@ -22,7 +22,7 @@ abstract f = abstraction name scope
         name = maybe (Local 0) prime $ maxBoundVariable (f $ variable (Local $ negate 1))
 
 -- | Construct the annotation of a term by a type. The term will be checked against this type.
-annotation :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Term f
+annotation :: Foldable f => Term f -> Term f -> Term f
 annotation term type' = checkedTyping typeChecker $ Annotation term type'
   where typeChecker against context = do
           _ <- typeOf term type' context
