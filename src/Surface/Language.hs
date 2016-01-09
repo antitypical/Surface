@@ -102,6 +102,10 @@ weakHeadNormalForm environment term = case out term of
     Just v -> v
     _ -> term
 
+  Binding (Expression (Application a b)) -> case out $ weakHeadNormalForm environment a of
+    (Binding (Expression (Lambda _ body))) -> weakHeadNormalForm environment $ applySubstitution b body
+    _ -> term
+
   _ -> term
 
 instance Monoid a => Alternative (Either a) where
