@@ -26,6 +26,7 @@ library
                      , Surface
                      , Surface.Language
                      , Surface.Pair
+                     , Surface.Renaming
                      , Surface.Unification
   build-depends:       base >= 4.7 && < 5
                      , containers
