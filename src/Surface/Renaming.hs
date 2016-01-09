@@ -13,7 +13,7 @@ rename old new (Term freeVariables typeChecker typing) = Term (replace old new f
 replace :: Ord a => a -> a -> Set.Set a -> Set.Set a
 replace old new set = if Set.member old set then Set.insert new $ Set.delete old set else set
 
-renameUnification :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Name -> Name -> Unification f -> Unification f
+renameUnification :: Functor f => Name -> Name -> Unification f -> Unification f
 renameUnification old new (Unification freeVariables typeChecker out) = Unification (replace old new freeVariables) typeChecker $ renameTypingBy (renameUnification old new) old new out
 renameUnification old new (Conflict expected actual) = Conflict (rename old new expected) (rename old new actual)
 
