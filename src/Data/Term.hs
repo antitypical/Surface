@@ -128,7 +128,7 @@ byUnifying :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Ch
 byUnifying a b against context = do
   a' <- a against context
   b' <- b against context
-  maybe (Left "couldn’t unify") Right $ unified $ unify a' b'
+  expectUnifiable a' b'
 
 unify :: (Show (Term f), Unifiable f, Traversable f, Eq (f (Term f))) => Term f -> Term f -> Unification f
 unify expected actual = case (out expected, out actual) of
