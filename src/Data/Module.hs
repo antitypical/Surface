@@ -4,9 +4,9 @@ import qualified Data.List as List
 import Data.Term.Types
 import Surface.Language
 
-data Module = Module [Definition]
+data Module = Module [Definition Term']
 
-(!) :: Module -> String -> Definition
+(!) :: Module -> String -> Definition Term'
 Module definitions ! key = case List.find ((== key) . symbol) definitions of
   Just x -> x
   _ -> error "Expected definition to exist"
@@ -14,7 +14,7 @@ Module definitions ! key = case List.find ((== key) . symbol) definitions of
 checkModule :: Context Term' -> Module -> Result [Term']
 checkModule context (Module definitions) = sequence $ checkDefinition context <$> definitions
 
-data Definition = Definition { symbol :: String, getType :: Term', getValue :: Term' }
+data Definition term = Definition { symbol :: String, getType :: term, getValue :: term }
 
-checkDefinition :: Context Term' -> Definition -> Result Term'
+checkDefinition :: Context Term' -> Definition Term' -> Result Term'
 checkDefinition context (Definition symbol t v) = typeOf t _type' context >> typeOf v t context
