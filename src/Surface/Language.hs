@@ -99,7 +99,7 @@ checkIsFunctionType type' = case out type' of
   _ -> Left "Expected function type."
 
 
-checkFunctionType :: (Term Expression -> Term Expression -> Context (Term Expression) -> Result (Term Expression)) -> Term Expression ->  Context (Term Expression) -> Result (Term Expression)
+checkFunctionType :: (Term Expression -> Term Expression -> Context (Term Expression) -> Result (Term Expression)) -> Checker (Term Expression)
 checkFunctionType check expected context = case out expected of
   Binding (Expression (Lambda from to)) -> check from to context
   Type _ -> check _type' _type' context
